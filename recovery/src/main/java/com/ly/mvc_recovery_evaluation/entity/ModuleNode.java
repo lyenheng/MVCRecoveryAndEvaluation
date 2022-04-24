@@ -29,4 +29,9 @@ public class ModuleNode {
     private ModuleType moduleType;
 
     private ModuleCoordinate moduleCoordinate;
+
+    /**
+     * 依赖包
+     */
+    private List<ModuleCoordinate> moduleDependencies;
 }
