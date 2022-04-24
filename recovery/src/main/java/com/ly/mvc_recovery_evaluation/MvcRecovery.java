@@ -1,7 +1,10 @@
 package com.ly.mvc_recovery_evaluation;
 
+import com.ly.mvc_recovery_evaluation.builder.ModuleDependencyGraphBuilder;
+import com.ly.mvc_recovery_evaluation.entity.ModuleDependencyGraph;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.entity.ProjectNode;
+import com.ly.mvc_recovery_evaluation.parser.DependencyParser;
 import com.ly.mvc_recovery_evaluation.parser.ModuleParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +22,12 @@ public class MvcRecovery {
     @Autowired
     private ModuleParser moduleParser;
 
+    @Autowired
+    private DependencyParser dependencyParser;
+
+    @Autowired
+    private ModuleDependencyGraphBuilder moduleDependencyGraphBuilder;
+
     public void recover(File rootFile){
 
         ProjectNode projectNode = new ProjectNode();
@@ -27,6 +36,14 @@ public class MvcRecovery {
 
         List<ModuleNode> moduleNodes = moduleParser.parse(projectNode);
 
+        for (ModuleNode moduleNode : moduleNodes) {
+            moduleNode.setModuleDependencies(dependencyParser.parse(moduleNode));
+        }
+
         projectNode.setModuleNodeList(moduleNodes);
+
+        ModuleDependencyGraph moduleDependencyGraph = moduleDependencyGraphBuilder.build(moduleNodes);
+
+        System.out.println(moduleDependencyGraph);
     }
 }

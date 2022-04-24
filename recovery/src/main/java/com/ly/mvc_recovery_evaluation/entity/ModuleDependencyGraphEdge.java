@@ -6,14 +6,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author liuyue
- * @date 2022/4/24 14:01
+ * @date 2022/4/24 16:20
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModuleCoordinate {
+public class ModuleDependencyGraphEdge {
 
-    private String groupId;
+    private ModuleNode startNode;
 
-    private String artifactId;
+    private ModuleNode endNode;
+
 }

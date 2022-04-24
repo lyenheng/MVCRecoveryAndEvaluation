@@ -13,9 +13,6 @@ import java.util.List;
 @Data
 public class ModuleNode {
 
-
-//    private List<ModuleNode> childModules;
-
     /**
      * 模块名
      */

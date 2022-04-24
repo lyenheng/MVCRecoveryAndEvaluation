@@ -26,8 +26,7 @@ public class ModuleParser {
     @Autowired
     private ModuleTypeExtractor moduleTypeExtractor;
 
-    @Autowired
-    private ModuleDependencyExtractor moduleDependencyExtractor;
+
 
     public List<ModuleNode> parse(ProjectNode projectNode){
 
@@ -60,7 +59,6 @@ public class ModuleParser {
                         moduleNode.setModuleType(moduleTypeExtractor.extract(childFile));
                         moduleNode.setModuleCoordinate(moduleCoordinateExtractor.extract(childFile));
                         moduleNode.setModuleFile(file);
-                        moduleNode.setModuleDependencies(moduleDependencyExtractor.extract(childFile));
 
                         moduleNodes.add(moduleNode);
                         break;
