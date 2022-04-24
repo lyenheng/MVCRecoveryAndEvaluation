@@ -9,7 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>entry</artifactId>
+    <artifactId>recovery</artifactId>
+
     <build>
         <plugins>
             <plugin>
@@ -34,10 +35,9 @@
             <version>3.23.1</version>
         </dependency>
         <dependency>
-            <artifactId>recovery</artifactId>
-            <groupId>com.ly.mvc_recovery_evalution</groupId>
-            <version>${project.version}</version>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.14.1</version>
         </dependency>
     </dependencies>
-
 </project>
