@@ -31,4 +31,9 @@ public class ModuleNode {
      * 依赖包
      */
     private List<ModuleCoordinate> moduleDependencies;
+
+    /**
+     * 启动类信息
+     */
+    private List<EntryNode> entryNodes;
 }

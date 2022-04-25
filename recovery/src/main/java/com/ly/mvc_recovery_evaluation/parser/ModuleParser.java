@@ -4,7 +4,6 @@ import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.entity.ProjectNode;
 import com.ly.mvc_recovery_evaluation.enums.ModuleType;
 import com.ly.mvc_recovery_evaluation.extractor.ModuleCoordinateExtractor;
-import com.ly.mvc_recovery_evaluation.extractor.ModuleDependencyExtractor;
 import com.ly.mvc_recovery_evaluation.extractor.ModuleTypeExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,8 +34,6 @@ public class ModuleParser {
         File projectFile = projectNode.getProjectFile();
 
         getChildFiles(projectFile, moduleNodes);
-
-
 
         return moduleNodes;
     }

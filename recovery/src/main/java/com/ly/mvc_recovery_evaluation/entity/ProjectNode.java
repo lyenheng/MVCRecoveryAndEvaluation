@@ -34,4 +34,10 @@ public class ProjectNode {
      * 配置文件信息
      */
     private ApplicationConfig applicationConfig;
+
+    /**
+     * 模块依赖图
+     */
+    private ModuleDependencyGraph moduleDependencyGraph;
+
 }

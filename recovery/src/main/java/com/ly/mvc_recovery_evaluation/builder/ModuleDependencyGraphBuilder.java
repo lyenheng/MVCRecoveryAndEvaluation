@@ -33,7 +33,7 @@ public class ModuleDependencyGraphBuilder {
         List<ModuleDependencyGraphEdge> graphEdges = new ArrayList<>();
         for (ModuleNode moduleNode : moduleNodes) {
             List<ModuleCoordinate> moduleDependencies = moduleNode.getModuleDependencies();
-            if (moduleDependencies.size() > 0){
+            if (moduleDependencies != null && moduleDependencies.size() > 0){
                 for (ModuleCoordinate moduleDependency : moduleDependencies) {
                     if (moduleNodeToModuleCoordinate.get(ModuleCoordinateConvertUtil.convert(moduleDependency)) != null){
                         ModuleDependencyGraphEdge graphEdge = new ModuleDependencyGraphEdge(moduleNodeToModuleCoordinate.get(ModuleCoordinateConvertUtil.convert(moduleDependency)), moduleNode);

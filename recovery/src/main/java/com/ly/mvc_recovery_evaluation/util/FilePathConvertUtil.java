@@ -19,4 +19,9 @@ public class FilePathConvertUtil {
         File moduleFile = moduleNode.getModuleFile();
         return new File(moduleFile.getAbsolutePath()+  File.separator + "src" + File.separator + "main");
     }
+
+    public static File getJavaFile(ModuleNode moduleNode){
+        File mainFile = getMainFile(moduleNode);
+        return new File(mainFile, "java");
+    }
 }
