@@ -4,6 +4,8 @@ import com.ly.mvc_recovery_evaluation.builder.ModuleDependencyGraphBuilder;
 import com.ly.mvc_recovery_evaluation.entity.ModuleDependencyGraph;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.entity.ProjectNode;
+import com.ly.mvc_recovery_evaluation.extractor.ConfigExtractor;
+import com.ly.mvc_recovery_evaluation.parser.ConfigParser;
 import com.ly.mvc_recovery_evaluation.parser.DependencyParser;
 import com.ly.mvc_recovery_evaluation.parser.ModuleParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,14 @@ public class MvcRecovery {
     private DependencyParser dependencyParser;
 
     @Autowired
+    private ConfigParser configParser;
+
+    @Autowired
     private ModuleDependencyGraphBuilder moduleDependencyGraphBuilder;
 
     public void recover(File rootFile){
 
+        // 提取模块信息
         ProjectNode projectNode = new ProjectNode();
         projectNode.setProjectFile(rootFile);
         projectNode.setProjectName(rootFile.getName());
@@ -38,12 +44,13 @@ public class MvcRecovery {
 
         for (ModuleNode moduleNode : moduleNodes) {
             moduleNode.setModuleDependencies(dependencyParser.parse(moduleNode));
+            configParser.parse(moduleNode);
         }
 
         projectNode.setModuleNodeList(moduleNodes);
 
+        // 构建模块依赖图
         ModuleDependencyGraph moduleDependencyGraph = moduleDependencyGraphBuilder.build(moduleNodes);
 
-        System.out.println(moduleDependencyGraph);
     }
 }
