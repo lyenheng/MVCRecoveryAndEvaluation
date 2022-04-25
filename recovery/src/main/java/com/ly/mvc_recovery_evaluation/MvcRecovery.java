@@ -1,6 +1,7 @@
 package com.ly.mvc_recovery_evaluation;
 
 import com.ly.mvc_recovery_evaluation.builder.ModuleDependencyGraphBuilder;
+import com.ly.mvc_recovery_evaluation.entity.ApplicationConfig;
 import com.ly.mvc_recovery_evaluation.entity.ModuleDependencyGraph;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.entity.ProjectNode;
@@ -10,6 +11,7 @@ import com.ly.mvc_recovery_evaluation.parser.DependencyParser;
 import com.ly.mvc_recovery_evaluation.parser.ModuleParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.util.List;
@@ -44,7 +46,10 @@ public class MvcRecovery {
 
         for (ModuleNode moduleNode : moduleNodes) {
             moduleNode.setModuleDependencies(dependencyParser.parse(moduleNode));
-            configParser.parse(moduleNode);
+            ApplicationConfig applicationConfig = configParser.parse(moduleNode);
+            if (applicationConfig != null){
+                projectNode.setApplicationConfig(applicationConfig);
+            }
         }
 
         projectNode.setModuleNodeList(moduleNodes);

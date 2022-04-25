@@ -29,4 +29,9 @@ public class ProjectNode {
      * 模块
      */
     private List<ModuleNode> moduleNodeList;
+
+    /**
+     * 配置文件信息
+     */
+    private ApplicationConfig applicationConfig;
 }

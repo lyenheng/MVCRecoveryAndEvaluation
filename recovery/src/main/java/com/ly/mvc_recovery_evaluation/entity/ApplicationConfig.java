@@ -12,7 +12,7 @@ public class ApplicationConfig {
     /**
      * 端口号
      */
-    private Integer port;
+    private String port;
 
     /**
      * 路径
@@ -23,4 +23,9 @@ public class ApplicationConfig {
      * 数据库连接
      */
     private String datasourceUrl;
+
+    /**
+     * 激活的配置文件
+     */
+    private String activeFile;
 }

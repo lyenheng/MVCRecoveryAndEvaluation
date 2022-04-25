@@ -1,6 +1,7 @@
 package com.ly.mvc_recovery_evaluation.extractor;
 
 import com.ly.mvc_recovery_evaluation.entity.ApplicationConfig;
+import com.ly.mvc_recovery_evaluation.util.YmlUtil;
 import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.Yaml;
 
@@ -21,31 +22,17 @@ public class ConfigExtractor {
         Yaml yaml = new Yaml();
         try {
             Map map = yaml.loadAs(new FileInputStream(configFile), Map.class);
-            if (map.get("server") != null){
-                Map serverMap = (Map)map.get("server");
-                if (serverMap.get("port") != null){
-                    Integer port = (Integer)serverMap.get("port");
-                    applicationConfig.setPort(port);
-                }
-                if (serverMap.get("servlet") != null){
-                    Map servletMap = (Map)serverMap.get("servlet");
-                    if (servletMap.get("context-path") != null){
-                       String contextPath = (String)servletMap.get("context-path");
-                       applicationConfig.setContextPath(contextPath);
-                    }
-                }
-            }
 
-            if (map.get("spring") != null){
-                Map springMap = (Map)map.get("spring");
-                if (springMap.get("datasource") != null ){
-                    Map datasourceMap = (Map) springMap.get("datasource");
-                    if (datasourceMap.get("url") != null){
-                        String url = (String)datasourceMap.get("url");
-                        applicationConfig.setDatasourceUrl(url);
-                    }
-                }
-            }
+            String port = YmlUtil.getProperty(map, "server.port");
+            String contextPath = YmlUtil.getProperty(map, "server.servlet.context-path");
+            String dataSourceUrl = YmlUtil.getProperty(map, "spring.datasource.url");
+            String activeFile = YmlUtil.getProperty(map, "spring.profiles.active");
+
+            applicationConfig.setPort(port);
+            applicationConfig.setContextPath(contextPath);
+            applicationConfig.setDatasourceUrl(dataSourceUrl);
+            applicationConfig.setActiveFile(activeFile);
+
         }catch (Exception e){
             e.printStackTrace();
         }
