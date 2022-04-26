@@ -34,7 +34,7 @@ public class ConfigExtractor {
             applicationConfig.setActiveFile(activeFile);
 
         }catch (Exception e){
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return applicationConfig;
     }

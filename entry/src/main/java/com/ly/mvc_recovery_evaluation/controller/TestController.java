@@ -23,7 +23,7 @@ public class TestController {
 
     @GetMapping("/recovery")
     public void testRecovery(){
-        File file = new File("E:\\keda\\project\\back\\dispatch-record-config");
+        File file = new File("E:\\keda\\project\\back\\dispatch-device-bind-backend");
         mvcRecovery.recover(file);
     }
 

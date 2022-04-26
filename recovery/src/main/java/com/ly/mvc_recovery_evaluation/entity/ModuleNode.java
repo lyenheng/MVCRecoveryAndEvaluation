@@ -37,4 +37,9 @@ public class ModuleNode {
      * 启动类信息
      */
     private List<EntryNode> entryNodes;
+
+    /**
+     * 基础类信息
+     */
+    private List<ClassDescription> classDescriptions;
 }

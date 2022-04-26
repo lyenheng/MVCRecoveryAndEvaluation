@@ -3,10 +3,7 @@ package com.ly.mvc_recovery_evaluation;
 import com.ly.mvc_recovery_evaluation.builder.ModuleDependencyGraphBuilder;
 import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.enums.ModuleType;
-import com.ly.mvc_recovery_evaluation.parser.ConfigParser;
-import com.ly.mvc_recovery_evaluation.parser.DependencyParser;
-import com.ly.mvc_recovery_evaluation.parser.EntryParser;
-import com.ly.mvc_recovery_evaluation.parser.ModuleParser;
+import com.ly.mvc_recovery_evaluation.parser.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +28,9 @@ public class MvcRecovery {
 
     @Autowired
     private EntryParser entryParser;
+
+    @Autowired
+    private ClassParser classParser;
 
     @Autowired
     private ModuleDependencyGraphBuilder moduleDependencyGraphBuilder;
@@ -64,6 +64,13 @@ public class MvcRecovery {
             if (entryNodes != null && entryNodes.size() > 0){
                 moduleNode.setEntryNodes(entryNodes);
             }
+
+            // 类基础信息（包括属于什么类型）
+            List<ClassDescription> classDescriptions = classParser.parse(moduleNode);
+            if (classDescriptions != null && classDescriptions.size() > 0){
+                moduleNode.setClassDescriptions(classDescriptions);
+            }
+
         }
 
         projectNode.setModuleNodeList(moduleNodes);
