@@ -3,14 +3,12 @@ package com.ly.mvc_recovery_evaluation;
 import com.ly.mvc_recovery_evaluation.builder.ModuleDependencyGraphBuilder;
 import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.enums.ModuleType;
-import com.ly.mvc_recovery_evaluation.extractor.ConfigExtractor;
 import com.ly.mvc_recovery_evaluation.parser.ConfigParser;
 import com.ly.mvc_recovery_evaluation.parser.DependencyParser;
 import com.ly.mvc_recovery_evaluation.parser.EntryParser;
 import com.ly.mvc_recovery_evaluation.parser.ModuleParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.util.List;

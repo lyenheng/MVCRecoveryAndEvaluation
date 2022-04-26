@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * 启动类信息
  * @author liuyue
  * @date 2022/4/25 18:56
  */

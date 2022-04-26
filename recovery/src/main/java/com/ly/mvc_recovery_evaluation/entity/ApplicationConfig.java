@@ -3,6 +3,7 @@ package com.ly.mvc_recovery_evaluation.entity;
 import lombok.Data;
 
 /**
+ * 配置文件信息
  * @author liuyue
  * @date 2022/4/24 20:04
  */

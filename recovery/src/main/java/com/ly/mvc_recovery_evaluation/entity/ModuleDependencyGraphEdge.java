@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 模块依赖图的边
  * @author liuyue
  * @date 2022/4/24 16:20
  */
