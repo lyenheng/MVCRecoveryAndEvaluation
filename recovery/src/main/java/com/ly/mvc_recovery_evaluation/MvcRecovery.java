@@ -33,6 +33,9 @@ public class MvcRecovery {
     private ClassParser classParser;
 
     @Autowired
+    private ControllerClassParser controllerClassParser;
+
+    @Autowired
     private ModuleDependencyGraphBuilder moduleDependencyGraphBuilder;
 
     public void recover(File rootFile){
@@ -70,6 +73,8 @@ public class MvcRecovery {
             if (classDescriptions != null && classDescriptions.size() > 0){
                 moduleNode.setClassDescriptions(classDescriptions);
             }
+
+            controllerClassParser.parse(moduleNode);
 
         }
 

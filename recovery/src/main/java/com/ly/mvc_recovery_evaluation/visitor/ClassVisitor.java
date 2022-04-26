@@ -60,6 +60,5 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDescription> {
             packagePath = clz.getFullyQualifiedName().get();
         }
         arg.setPackagePath(packagePath);
-
     }
 }

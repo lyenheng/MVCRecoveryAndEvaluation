@@ -2,8 +2,8 @@ package com.ly.mvc_recovery_evaluation.parser;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.ly.mvc_recovery_evaluation.entity.ClassDescription;
-import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
+import com.ly.mvc_recovery_evaluation.entity.*;
+import com.ly.mvc_recovery_evaluation.enums.ClassType;
 import com.ly.mvc_recovery_evaluation.util.FilePathConvertUtil;
 import com.ly.mvc_recovery_evaluation.visitor.ClassVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,23 @@ public class ClassParser {
                 CompilationUnit compilationUnit = new JavaParser().parse(file).getResult().get();
                 compilationUnit.accept(classVisitor, classDescription);
 
-                classDescriptions.add(classDescription);
+                if (classDescription.getClassType() == null){
+                    classDescriptions.add(classDescription);
+                }else {
+                    if (classDescription.getClassType().equals(ClassType.CONTROLLER)){
+                        ControllerClassDescription controllerClassDescription = new ControllerClassDescription(classDescription);
+                        classDescriptions.add(controllerClassDescription);
+                    }else if (classDescription.getClassType().equals(ClassType.SERVICE)){
+                        ServiceClassDescription serviceClassDescription = new ServiceClassDescription(classDescription);
+                        classDescriptions.add(serviceClassDescription);
+                    }else if (classDescription.getClassType().equals(ClassType.DAO)){
+                        DaoClassDescription daoClassDescription = new DaoClassDescription(classDescription);
+                        classDescriptions.add(daoClassDescription);
+                    } else {
+                        classDescriptions.add(classDescription);
+                    }
+                }
+
             }catch (Exception e){
                 e.printStackTrace();
             }
