@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author liuyue
  * @date 2022/4/26 20:03
@@ -13,7 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ServiceClassDescription extends ClassDescription {
 
-    public String test;
+    /**
+     * 实现的接口
+     */
+    public List<String> interfaceServices;
+
+    /**
+     * 继承的接口
+     */
+    public List<String> extendsServices;
 
     public ServiceClassDescription(ClassDescription classDescription){
         this.setName(classDescription.getName());

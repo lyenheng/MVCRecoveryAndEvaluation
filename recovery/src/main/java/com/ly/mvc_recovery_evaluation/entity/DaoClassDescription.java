@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author liuyue
  * @date 2022/4/26 20:04
@@ -13,7 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DaoClassDescription extends ClassDescription {
 
-    public String test;
+    /**
+     * 实现的接口
+     */
+    public List<String> interfaceServices;
+
+    /**
+     * 继承的接口
+     */
+    public List<String> extendsServices;
 
     public DaoClassDescription(ClassDescription classDescription){
         this.setName(classDescription.getName());

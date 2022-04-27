@@ -36,6 +36,12 @@ public class MvcRecovery {
     private ControllerClassParser controllerClassParser;
 
     @Autowired
+    private ServiceClassParser serviceClassParser;
+
+    @Autowired
+    private DaoClassParser daoClassParser;
+
+    @Autowired
     private ModuleDependencyGraphBuilder moduleDependencyGraphBuilder;
 
     public void recover(File rootFile){
@@ -75,7 +81,8 @@ public class MvcRecovery {
             }
 
             controllerClassParser.parse(moduleNode);
-
+            serviceClassParser.parse(moduleNode);
+            daoClassParser.parse(moduleNode);
         }
 
         projectNode.setModuleNodeList(moduleNodes);
