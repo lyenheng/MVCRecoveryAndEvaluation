@@ -54,11 +54,11 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDescription> {
         String className = clz.getName().toString();
         arg.setName(className);
 
-        // 包名
-        String packagePath = "";
+        // 全限定类名
+        String fullyQualifiedName = "";
         if (clz.getFullyQualifiedName().isPresent()) {
-            packagePath = clz.getFullyQualifiedName().get();
+            fullyQualifiedName = clz.getFullyQualifiedName().get();
         }
-        arg.setPackagePath(packagePath);
+        arg.setFullyQualifiedName(fullyQualifiedName);
     }
 }

@@ -24,9 +24,9 @@ public class ClassDescription {
     private ClassType classType;
 
     /**
-     * 包路径
+     * 全限定类名
      */
-    private String packagePath;
+    private String fullyQualifiedName;
 
     /**
      * 注解信息

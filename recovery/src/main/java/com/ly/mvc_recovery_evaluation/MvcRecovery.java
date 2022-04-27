@@ -4,6 +4,7 @@ import com.ly.mvc_recovery_evaluation.builder.ModuleDependencyGraphBuilder;
 import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.enums.ModuleType;
 import com.ly.mvc_recovery_evaluation.parser.*;
+import com.ly.mvc_recovery_evaluation.util.ClassSearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -53,6 +54,8 @@ public class MvcRecovery {
 
         List<ModuleNode> moduleNodes = moduleParser.parse(projectNode);
 
+
+
         for (ModuleNode moduleNode : moduleNodes) {
 
             if (moduleNode.getModuleType().equals(ModuleType.POM)){
@@ -86,6 +89,7 @@ public class MvcRecovery {
         }
 
         projectNode.setModuleNodeList(moduleNodes);
+
 
         // 构建模块依赖图
         ModuleDependencyGraph moduleDependencyGraph = moduleDependencyGraphBuilder.build(moduleNodes);

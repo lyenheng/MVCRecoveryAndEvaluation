@@ -33,6 +33,6 @@ public class ControllerClassDescription extends ClassDescription {
         this.setAnnotations(classDescription.getAnnotations());
         this.setClassType(classDescription.getClassType());
         this.setFile(classDescription.getFile());
-        this.setPackagePath(classDescription.getPackagePath());
+        this.setFullyQualifiedName(classDescription.getFullyQualifiedName());
     }
 }
