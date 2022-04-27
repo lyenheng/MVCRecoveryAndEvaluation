@@ -23,5 +23,5 @@ public class ParameterInfo {
     /**
      * 参数属性名拼接的字符串
      */
-    private String parameter;
+    private String parameterName;
 }

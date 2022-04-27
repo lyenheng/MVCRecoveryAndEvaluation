@@ -21,6 +21,8 @@ public class ControllerClassDescription extends ClassDescription {
      */
     private String apiDescription;
 
+    private String parentRequestPath;
+
     /**
      * 接口信息
      */
