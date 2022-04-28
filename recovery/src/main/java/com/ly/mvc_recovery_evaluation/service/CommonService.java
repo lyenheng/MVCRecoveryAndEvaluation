@@ -2,15 +2,9 @@ package com.ly.mvc_recovery_evaluation.service;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.ly.mvc_recovery_evaluation.entity.ClassDescription;
-import com.ly.mvc_recovery_evaluation.entity.DaoClassDescription;
-import com.ly.mvc_recovery_evaluation.entity.ServiceClassDescription;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,11 +14,17 @@ import java.util.Optional;
 @Component
 public class CommonService {
 
-    public void getExtendsOrImplementsFullyQualifiedName(ClassOrInterfaceDeclaration clz, ClassDescription arg) {
+    /**
+     * 根据类名获取全限定类名
+     * @param clz
+     * @param className
+     * @return
+     */
+    public String getFullyQualifiedNameByClassName(ClassOrInterfaceDeclaration clz, String className){
 
-
-        List<String> extendsServices = new ArrayList<>();
-        List<String> interfaceServices = new ArrayList<>();
+        if (StringUtils.isEmpty(className)){
+            return null;
+        }
 
         // imports
         NodeList<ImportDeclaration> imports = new NodeList<>();
@@ -39,48 +39,16 @@ public class CommonService {
             }
         }
 
-        // 继承类
-        NodeList<ClassOrInterfaceType> extendedTypes = clz.getExtendedTypes();
-        getFullyQualifiedName(extendsServices, imports, packageDeclaration, extendedTypes);
-
-        // 实现类
-        NodeList<ClassOrInterfaceType> implementedTypes = clz.getImplementedTypes();
-        getFullyQualifiedName(interfaceServices, imports, packageDeclaration, implementedTypes);
-
-        if (arg instanceof ServiceClassDescription) {
-            ((ServiceClassDescription) arg).setExtendsServices(extendsServices);
-            ((ServiceClassDescription) arg).setInterfaceServices(interfaceServices);
-        } else if (arg instanceof DaoClassDescription) {
-            ((DaoClassDescription) arg).setInterfaceServices(interfaceServices);
-            ((DaoClassDescription) arg).setExtendsServices(extendsServices);
-        }
-    }
-
-    /**
-     * 获取继承类或者接口的全限定类名
-     * @param extendsServices / interfaceServices
-     * @param imports
-     * @param packageDeclaration
-     * @param extendedTypes
-     */
-    private void getFullyQualifiedName(List<String> extendsServices, NodeList<ImportDeclaration> imports, String packageDeclaration, NodeList<ClassOrInterfaceType> extendedTypes) {
-        if (extendedTypes != null && extendedTypes.size() > 0) {
-            for (ClassOrInterfaceType extendedType : extendedTypes) {
-
-                boolean flag = false;
-                for (ImportDeclaration anImport : imports) {
-                    if (anImport.getNameAsString().endsWith(extendedType.getNameAsString())) {
-                        extendsServices.add(anImport.getNameAsString());
-                        flag = true;
-                        break;
-                    }
-                }
-                if (!flag && !StringUtils.isEmpty(packageDeclaration)) {
-                    extendsServices.add(packageDeclaration + "." + extendedType.getNameAsString());
-                } else if (!flag) {
-                    extendsServices.add(extendedType.getNameAsString());
-                }
+        for (ImportDeclaration anImport : imports) {
+            if (anImport.getNameAsString().endsWith(className)){
+                return anImport.getNameAsString();
             }
         }
+
+        if (StringUtils.isEmpty(packageDeclaration)){
+            return className;
+        }
+        return packageDeclaration + "." + className;
+
     }
 }

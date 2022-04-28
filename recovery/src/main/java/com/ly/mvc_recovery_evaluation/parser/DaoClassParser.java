@@ -36,6 +36,8 @@ public class DaoClassParser {
                 File serviceFile = classDescription.getFile();
 
                 DaoClassDescription daoClassDescription = (DaoClassDescription)classDescription ;
+
+
                 try {
                     CompilationUnit compilationUnit = new JavaParser().parse(serviceFile).getResult().get();
                     compilationUnit.accept(daoClassVisitor, daoClassDescription);

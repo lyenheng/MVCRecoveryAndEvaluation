@@ -86,6 +86,7 @@ public class MvcRecovery {
             controllerClassParser.parse(moduleNode);
             serviceClassParser.parse(moduleNode);
             daoClassParser.parse(moduleNode);
+            System.out.println("moduleNode" + moduleNode);
         }
 
         projectNode.setModuleNodeList(moduleNodes);
