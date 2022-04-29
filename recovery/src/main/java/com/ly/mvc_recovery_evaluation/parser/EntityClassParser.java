@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author liuyue
@@ -20,13 +21,22 @@ public class EntityClassParser {
     @Autowired
     private EntityClassVisitor entityClassVisitor;
 
-    public void parse(File entityFile){
+    public Map<String, String> parse(File entityFile){
         try {
-            HashMap<String, ClassOrInterfaceType> arg = new HashMap<>();
+            Map<String, ClassOrInterfaceType> arg = new HashMap<>();
             CompilationUnit compilationUnit = new JavaParser().parse(entityFile).getResult().get();
             compilationUnit.accept(entityClassVisitor, arg);
+
+            Map<String, String> nameToType = new HashMap<>();
+            arg.forEach((name , type) -> {
+                nameToType.put(name, type.asString());
+            });
+
+            return nameToType;
+
         }catch (Exception e){
             e.printStackTrace();
         }
+        return null;
     }
 }

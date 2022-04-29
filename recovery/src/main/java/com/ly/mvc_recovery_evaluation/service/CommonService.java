@@ -5,6 +5,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.ly.mvc_recovery_evaluation.bean.ProjectNode;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.enums.ModuleType;
+import com.ly.mvc_recovery_evaluation.util.ClassHandleUtil;
 import com.ly.mvc_recovery_evaluation.util.FilePathConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,11 @@ public class CommonService {
 
         if (StringUtils.isEmpty(className)){
             return null;
+        }
+
+        // 如果是基础类型
+        if (!ClassHandleUtil.isEntityType(className)){
+            return className;
         }
 
         // imports

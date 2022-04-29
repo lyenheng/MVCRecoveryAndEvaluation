@@ -20,14 +20,13 @@ import com.ly.mvc_recovery_evaluation.parser.EntityClassParser;
 import com.ly.mvc_recovery_evaluation.service.CommonService;
 import com.ly.mvc_recovery_evaluation.util.AnnotationUtil;
 import com.ly.mvc_recovery_evaluation.util.ClassHandleUtil;
+import com.ly.mvc_recovery_evaluation.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -214,6 +213,29 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
         if (parameterTypeName.equals("List")){
             // List类型
 
+            StringBuilder json = new StringBuilder("[");
+            Optional<NodeList<Type>> typeArguments = parameterType.getTypeArguments();
+            if (typeArguments.isPresent()){
+                String typeName = ((ClassOrInterfaceType) typeArguments.get().get(0)).getNameAsString();
+                if (!ClassHandleUtil.isEntityType(typeName)){
+                    // 基础类
+                    json.append(typeName);
+                }else {
+                    // 实体类
+                    String fullyQualifiedName = commonService.getFullyQualifiedNameByClassName(clz, typeName);
+                    File searchFile = commonService.search(fullyQualifiedName);
+                    if (searchFile == null || !searchFile.exists()){
+                        json.append(typeName);
+                    }else {
+                        json.append(StrUtil.mapToJson(entityClassParser.parse(searchFile)));
+                    }
+
+                }
+            }
+
+            json.append("]");
+            return json.toString();
+
         }else if (parameterName.equals("Map")){
             // Map类型
 
@@ -223,8 +245,14 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
             String fullyQualifiedName = commonService.getFullyQualifiedNameByClassName(clz, parameterTypeName);
             // 根据全限定类名找到对应的文件
             File searchFile = commonService.search(fullyQualifiedName);
-
-           entityClassParser.parse(searchFile);
+            if (searchFile == null || !searchFile.exists()){
+                HashMap<String, String> map = new HashMap<>();
+                map.put(parameterName, parameterTypeName);
+                return StrUtil.mapToJson(map);
+            }else {
+                Map<String, String> parse = entityClassParser.parse(searchFile);
+                return StrUtil.mapToJson(parse);
+            }
         }
 
         return null;
