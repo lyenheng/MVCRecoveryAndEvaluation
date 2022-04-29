@@ -1,10 +1,10 @@
 package com.ly.mvc_recovery_evaluation;
 
+import com.ly.mvc_recovery_evaluation.bean.ProjectNode;
 import com.ly.mvc_recovery_evaluation.builder.ModuleDependencyGraphBuilder;
 import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.enums.ModuleType;
 import com.ly.mvc_recovery_evaluation.parser.*;
-import com.ly.mvc_recovery_evaluation.util.ClassSearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +17,9 @@ import java.util.List;
  */
 @Component
 public class MvcRecovery {
+
+    @Autowired
+    private ProjectNode projectNode;
 
     @Autowired
     private ModuleParser moduleParser;
@@ -48,13 +51,12 @@ public class MvcRecovery {
     public void recover(File rootFile){
 
         // 提取模块信息
-        ProjectNode projectNode = new ProjectNode();
         projectNode.setProjectFile(rootFile);
         projectNode.setProjectName(rootFile.getName());
 
         List<ModuleNode> moduleNodes = moduleParser.parse(projectNode);
 
-
+        projectNode.setModuleNodeList(moduleNodes);
 
         for (ModuleNode moduleNode : moduleNodes) {
 
@@ -88,9 +90,6 @@ public class MvcRecovery {
             daoClassParser.parse(moduleNode);
             System.out.println("moduleNode" + moduleNode);
         }
-
-        projectNode.setModuleNodeList(moduleNodes);
-
 
         // 构建模块依赖图
         ModuleDependencyGraph moduleDependencyGraph = moduleDependencyGraphBuilder.build(moduleNodes);

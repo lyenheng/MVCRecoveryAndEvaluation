@@ -2,9 +2,17 @@ package com.ly.mvc_recovery_evaluation.service;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.ly.mvc_recovery_evaluation.bean.ProjectNode;
+import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
+import com.ly.mvc_recovery_evaluation.enums.ModuleType;
+import com.ly.mvc_recovery_evaluation.util.FilePathConvertUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -13,6 +21,9 @@ import java.util.Optional;
  */
 @Component
 public class CommonService {
+
+    @Autowired
+    private ProjectNode projectNode;
 
     /**
      * 根据类名获取全限定类名
@@ -50,5 +61,44 @@ public class CommonService {
         }
         return packageDeclaration + "." + className;
 
+    }
+
+    /**
+     * 根据全限定类名找到对应的文件
+     * @param fullyQualifiedName
+     * @return
+     */
+    public File search(String fullyQualifiedName){
+
+        String[] split = fullyQualifiedName.split("\\.");
+        if (split.length < 2){
+            return null;
+        }
+
+        String[] path = Arrays.copyOfRange(split, 0, split.length - 1);
+        String className = split[split.length - 1];
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String s : path) {
+            stringBuilder.append(s).append(File.separator);
+        }
+        stringBuilder.append(className).append(".java");
+
+        List<ModuleNode> moduleNodeList = projectNode.getModuleNodeList();
+        if (moduleNodeList != null && moduleNodeList.size() > 0){
+            for (ModuleNode moduleNode : moduleNodeList) {
+                if (moduleNode.getModuleType().equals(ModuleType.POM)){
+                    continue;
+                }
+
+                File javaFile = FilePathConvertUtil.getJavaFile(moduleNode);
+
+                File file = new File(javaFile.getAbsolutePath() + File.separator + stringBuilder.toString());
+                if (file.exists()){
+                    return file;
+                }
+            }
+        }
+        return null;
     }
 }

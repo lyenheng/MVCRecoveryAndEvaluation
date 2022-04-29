@@ -1,7 +1,7 @@
 package com.ly.mvc_recovery_evaluation.parser;
 
 import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
-import com.ly.mvc_recovery_evaluation.entity.ProjectNode;
+import com.ly.mvc_recovery_evaluation.bean.ProjectNode;
 import com.ly.mvc_recovery_evaluation.enums.ModuleType;
 import com.ly.mvc_recovery_evaluation.extractor.ModuleCoordinateExtractor;
 import com.ly.mvc_recovery_evaluation.extractor.ModuleTypeExtractor;

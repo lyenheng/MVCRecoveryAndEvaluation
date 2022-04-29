@@ -1,7 +1,11 @@
-package com.ly.mvc_recovery_evaluation.entity;
+package com.ly.mvc_recovery_evaluation.bean;
 
+import com.ly.mvc_recovery_evaluation.entity.ApplicationConfig;
+import com.ly.mvc_recovery_evaluation.entity.ModuleDependencyGraph;
+import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.enums.ProjectType;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.List;
@@ -12,6 +16,7 @@ import java.util.List;
  * @date 2022/4/24 11:03
  */
 @Data
+@Component
 public class ProjectNode {
 
     /**

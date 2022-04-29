@@ -4,6 +4,7 @@ package com.ly.mvc_recovery_evaluation.util;
 import com.ly.mvc_recovery_evaluation.entity.ModuleCoordinate;
 
 /**
+ * 将模块的groupId和artifactId与字符串的转换
  * @author liuyue
  * @date 2022/4/24 16:35
  */

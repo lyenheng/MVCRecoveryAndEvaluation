@@ -10,5 +10,9 @@ public enum  RequestParameterType {
 
     BODY,
 
-    PARAM
+    PARAM,
+
+    OTHERS,
+
+    NULL
 }

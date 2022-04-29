@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 /**
+ * 获取注解的key值
  * @author liuyue
  * @date 2022/4/27 12:48
  */

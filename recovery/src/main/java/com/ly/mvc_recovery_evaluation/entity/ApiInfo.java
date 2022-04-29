@@ -39,6 +39,6 @@ public class ApiInfo {
     /**
      * 参数
      */
-    private List<ParameterInfo> parameters;
+    private List<ApiParameterInfo> apiParameterInfos;
 
 }
