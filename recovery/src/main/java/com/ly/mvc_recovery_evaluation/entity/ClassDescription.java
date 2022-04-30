@@ -32,4 +32,10 @@ public class ClassDescription {
      * 注解信息
      */
     private List<String> annotations;
+
+    /**
+     * 注入信息
+     */
+    private List<InjectionInfo> injectionInfos;
+
 }

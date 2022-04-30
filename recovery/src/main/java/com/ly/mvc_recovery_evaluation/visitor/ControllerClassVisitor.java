@@ -14,7 +14,6 @@ import com.ly.mvc_recovery_evaluation.entity.ControllerClassDescription;
 import com.ly.mvc_recovery_evaluation.entity.ApiParameterInfo;
 import com.ly.mvc_recovery_evaluation.enums.RequestParameterType;
 import com.ly.mvc_recovery_evaluation.enums.RequestType;
-import com.ly.mvc_recovery_evaluation.parser.EntityClassParser;
 import com.ly.mvc_recovery_evaluation.service.TypeResolveService;
 import com.ly.mvc_recovery_evaluation.util.AnnotationUtil;
 import com.ly.mvc_recovery_evaluation.util.ClassHandleUtil;
@@ -23,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
 import java.util.*;
 
 

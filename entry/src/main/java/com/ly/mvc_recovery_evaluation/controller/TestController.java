@@ -3,11 +3,13 @@ package com.ly.mvc_recovery_evaluation.controller;
 import com.ly.mvc_recovery_evaluation.MvcRecovery;
 import com.ly.mvc_recovery_evaluation.bean.ProjectNode;
 import com.ly.mvc_recovery_evaluation.entity.ApiInfo;
-import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
+import com.ly.mvc_recovery_evaluation.service.CommonService;
+import com.ly.mvc_recovery_evaluation.service.TypeResolveService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,12 @@ public class TestController {
 
     @Autowired
     private MvcRecovery mvcRecovery;
+
+    @Autowired
+    private CommonService service;
+
+    @Resource(name = "test")
+    private TypeResolveService typeResolveService;
 
 
     @GetMapping("/recovery")

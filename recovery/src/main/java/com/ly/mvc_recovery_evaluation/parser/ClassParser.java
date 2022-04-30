@@ -6,6 +6,7 @@ import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.enums.ClassType;
 import com.ly.mvc_recovery_evaluation.util.FilePathConvertUtil;
 import com.ly.mvc_recovery_evaluation.visitor.ClassVisitor;
+import com.ly.mvc_recovery_evaluation.visitor.InjectionVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,9 @@ public class ClassParser {
 
     @Autowired
     private ClassVisitor classVisitor;
+
+    @Autowired
+    private InjectionVisitor injectionVisitor;
 
     public List<ClassDescription> parse(ModuleNode moduleNode){
 
@@ -44,6 +48,7 @@ public class ClassParser {
                 classDescription.setFile(file);
                 CompilationUnit compilationUnit = new JavaParser().parse(file).getResult().get();
                 compilationUnit.accept(classVisitor, classDescription);
+                compilationUnit.accept(injectionVisitor, classDescription);
 
                 if (classDescription.getClassType() == null){
                     classDescriptions.add(classDescription);
