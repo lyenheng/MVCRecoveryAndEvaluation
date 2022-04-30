@@ -33,19 +33,19 @@ public class TypeResolveService {
     /**
      * 解析实体类型
      * @param clz
-     * @param parameterTypeName
+     * @param className
      * @return
      */
-    public String resolveEntity(ClassOrInterfaceDeclaration clz, String parameterTypeName) {
+    public String resolveEntity(ClassOrInterfaceDeclaration clz, String className) {
 
         // 根据类名找到全限定类名
-        String fullyQualifiedName = commonService.getFullyQualifiedNameByClassName(clz, parameterTypeName);
+        String fullyQualifiedName = commonService.getFullyQualifiedNameByClassName(clz, className);
         // 根据全限定类名找到对应的文件
         File searchFile = commonService.search(fullyQualifiedName);
         if (searchFile == null || !searchFile.exists()){
             // 如果对应的文件未找到
             HashMap<String, String> map = new HashMap<>();
-            map.put(parameterTypeName.substring(0,1).toLowerCase()+parameterTypeName.substring(1), parameterTypeName);
+            map.put(className.substring(0,1).toLowerCase()+className.substring(1), className);
             return StrUtil.mapToJson(map);
         }else {
             Map<String, String> parse = entityClassParser.parse(searchFile);

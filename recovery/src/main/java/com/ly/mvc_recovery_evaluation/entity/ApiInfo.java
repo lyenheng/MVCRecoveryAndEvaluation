@@ -1,5 +1,6 @@
 package com.ly.mvc_recovery_evaluation.entity;
 
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.ly.mvc_recovery_evaluation.enums.RequestType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,6 +36,11 @@ public class ApiInfo {
      * 返回值
      */
     private String returnValue;
+
+    /**
+     * 解析后的返回值
+     */
+    private String resolvedReturnValueStr;
 
     /**
      * 参数

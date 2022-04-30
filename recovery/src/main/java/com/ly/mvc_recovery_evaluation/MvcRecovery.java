@@ -48,7 +48,7 @@ public class MvcRecovery {
     @Autowired
     private ModuleDependencyGraphBuilder moduleDependencyGraphBuilder;
 
-    public void recover(File rootFile){
+    public ProjectNode recover(File rootFile){
 
         // 提取模块信息
         projectNode.setProjectFile(rootFile);
@@ -88,12 +88,12 @@ public class MvcRecovery {
             controllerClassParser.parse(moduleNode);
             serviceClassParser.parse(moduleNode);
             daoClassParser.parse(moduleNode);
-            System.out.println("moduleNode" + moduleNode);
         }
 
         // 构建模块依赖图
         ModuleDependencyGraph moduleDependencyGraph = moduleDependencyGraphBuilder.build(moduleNodes);
         projectNode.setModuleDependencyGraph(moduleDependencyGraph);
 
+        return projectNode;
     }
 }

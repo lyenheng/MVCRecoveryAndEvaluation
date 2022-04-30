@@ -39,6 +39,7 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
 
     /**
      * 处理类
+     *
      * @param clz
      * @param arg
      */
@@ -51,13 +52,13 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
         // 获取类的swagger信息和请求路径
         for (AnnotationExpr annotation : clz.getAnnotations()) {
             // swagger注解信息
-            if (annotation.getNameAsString().equals("Api")){
+            if (annotation.getNameAsString().equals("Api")) {
                 String tags = AnnotationUtil.getValue(annotation, "tags");
                 arg.setApiDescription(tags);
             }
 
             // 请求父路径
-            if (annotation.getNameAsString().equals("RequestMapping")){
+            if (annotation.getNameAsString().equals("RequestMapping")) {
                 parentPath = AnnotationUtil.getValue(annotation, "value");
                 arg.setParentRequestPath(parentPath);
             }
@@ -66,6 +67,7 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
 
     /**
      * 处理方法
+     *
      * @param method
      * @param arg
      */
@@ -77,26 +79,26 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
         ClassOrInterfaceDeclaration clz = null;
 
         Optional<Node> parentNode = method.getParentNode();
-        if (parentNode.isPresent()){
-            clz = (ClassOrInterfaceDeclaration)parentNode.get();
-        }else {
-            return ;
+        if (parentNode.isPresent()) {
+            clz = (ClassOrInterfaceDeclaration) parentNode.get();
+        } else {
+            return;
         }
 
         ApiInfo apiInfo = new ApiInfo();
         NodeList<AnnotationExpr> annotations = method.getAnnotations();
-        if (annotations != null && annotations.size() > 0){
+        if (annotations != null && annotations.size() > 0) {
             for (AnnotationExpr annotation : annotations) {
-                if (annotation.getNameAsString().equals("ApiOperation")){
+                if (annotation.getNameAsString().equals("ApiOperation")) {
                     // swagger注解信息
                     String apiOperationInfo = AnnotationUtil.getValue(annotation, "value");
                     apiInfo.setApiOperationInfo(apiOperationInfo);
-                }else {
+                } else {
                     // 请求类型和请求路径信息
                     String requestPath = AnnotationUtil.getValue(annotation, "value");
                     boolean flag = true;
-                    switch (annotation.getNameAsString()){
-                        case "PostMapping" :
+                    switch (annotation.getNameAsString()) {
+                        case "PostMapping":
                             apiInfo.setRequestType(RequestType.POST);
                             break;
                         case "GetMapping":
@@ -113,20 +115,20 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
                             break;
                         case "RequestMapping":
                             String methodType = AnnotationUtil.getValue(annotation, "method");
-                            if (StringUtils.isEmpty(methodType)){
+                            if (StringUtils.isEmpty(methodType)) {
                                 apiInfo.setRequestType(RequestType.ALL);
                                 break;
                             }
 
-                            if (methodType.equals("RequestMethod.GET")){
+                            if (methodType.equals("RequestMethod.GET")) {
                                 apiInfo.setRequestType(RequestType.GET);
-                            }else if (methodType.equals("RequestMethod.POST")){
+                            } else if (methodType.equals("RequestMethod.POST")) {
                                 apiInfo.setRequestType(RequestType.POST);
-                            }else if (methodType.equals("RequestMethod.PUT")){
+                            } else if (methodType.equals("RequestMethod.PUT")) {
                                 apiInfo.setRequestType(RequestType.PUT);
-                            }else if (methodType.equals("RequestMethod.PATCH")){
+                            } else if (methodType.equals("RequestMethod.PATCH")) {
                                 apiInfo.setRequestType(RequestType.PATCH);
-                            }else if (methodType.equals("RequestMethod.DELETE")){
+                            } else if (methodType.equals("RequestMethod.DELETE")) {
                                 apiInfo.setRequestType(RequestType.DELETE);
                             }
                             break;
@@ -134,7 +136,7 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
                             flag = false;
 
                     }
-                    if (flag){
+                    if (flag) {
                         apiInfo.setRequestPath(requestPath);
                     }
                 }
@@ -142,20 +144,21 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
         }
 
         // 返回值
-        String returnValue = method.getType().toString();
-        apiInfo.setReturnValue(returnValue);
+        Type type = method.getType();
+        apiInfo.setReturnValue(type.toString());
+        apiInfo.setResolvedReturnValueStr(resolveReturnValue(clz, type));
         // 参数
         NodeList<Parameter> parameters = method.getParameters();
-        if (parameters != null && parameters.size() > 0){
+        if (parameters != null && parameters.size() > 0) {
             List<ApiParameterInfo> apiParameterInfos = new ArrayList<>();
             for (Parameter parameter : parameters) {
 
                 ApiParameterInfo apiParameterInfo = new ApiParameterInfo();
                 apiParameterInfo.setParameter(parameter);
 
-                if (parameter.getAnnotations().size() > 0){
+                if (parameter.getAnnotations().size() > 0) {
                     for (AnnotationExpr annotation : parameter.getAnnotations()) {
-                        switch (annotation.getNameAsString()){
+                        switch (annotation.getNameAsString()) {
                             case "RequestBody":
                                 apiParameterInfo.setRequestParameterType(RequestParameterType.BODY);
                                 break;
@@ -169,13 +172,13 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
                                 apiParameterInfo.setRequestParameterType(RequestParameterType.OTHERS);
                         }
                     }
-                }else {
+                } else {
                     apiParameterInfo.setRequestParameterType(RequestParameterType.NULL);
                 }
 
                 if (!apiParameterInfo.getRequestParameterType().equals(RequestParameterType.NULL)
                         && !apiParameterInfo.getRequestParameterType().equals(RequestParameterType.OTHERS)
-                ){
+                ) {
 
                     apiParameterInfo.setResolvedParameterJSON(resolveParameter(clz, apiParameterInfo));
                 }
@@ -190,34 +193,71 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
 
     /**
      * 解析参数信息，根据类名获取详细属性信息
+     *
      * @param clz
      * @param apiParameterInfo
      * @return
      */
-    private String resolveParameter(ClassOrInterfaceDeclaration clz, ApiParameterInfo apiParameterInfo){
+    private String resolveParameter(ClassOrInterfaceDeclaration clz, ApiParameterInfo apiParameterInfo) {
 
         Parameter parameter = apiParameterInfo.getParameter();
 
         String parameterName = parameter.getNameAsString();
-        ClassOrInterfaceType parameterType = (ClassOrInterfaceType)parameter.getType();
-        String parameterTypeName = parameterType.getNameAsString();
-        if (!ClassHandleUtil.isEntityType(parameterTypeName)){
+        Type type = parameter.getType();
+        // 如果参数类型是封装类
+        String parameterTypeName = type instanceof ClassOrInterfaceType
+                ? ((ClassOrInterfaceType) type).getNameAsString()
+                : type.asString();
+        if (!ClassHandleUtil.isEntityType(parameterTypeName)) {
             // 基本数据类型
-            return parameterName +  ": " +parameterTypeName ;
+            return parameterName + ": " + parameterTypeName;
         }
 
-        if (parameterTypeName.equals("List")){
+        ClassOrInterfaceType parameterType = (ClassOrInterfaceType) parameter.getType();
+        if (parameterTypeName.equals("List")) {
             // List类型
             return typeResolveService.resolveList(clz, parameterType);
 
-        }else if (parameterName.equals("Map")){
+        } else if (parameterName.equals("Map")) {
             // Map类型
             HashMap<String, String> map = new HashMap<>();
             map.put(parameterName, parameterTypeName);
             return StrUtil.mapToJson(map);
-        }else {
+        } else {
             // 实体对象
-            return typeResolveService.resolveEntity(clz,parameterTypeName);
+            return typeResolveService.resolveEntity(clz, parameterTypeName);
+        }
+    }
+
+    /**
+     * 解析返回值信息
+     *
+     * @param clz
+     * @param type
+     * @return
+     */
+    private String resolveReturnValue(ClassOrInterfaceDeclaration clz, Type type) {
+
+        if (type instanceof ClassOrInterfaceType){
+
+            ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType)type;
+            String typeName = classOrInterfaceType.getNameAsString();
+
+            if (!ClassHandleUtil.isEntityType(typeName)){
+                // 基础类型
+                return typeName;
+            }else if (typeName.equals("List")){
+                // List类型
+                return typeResolveService.resolveList(clz, classOrInterfaceType);
+            }else if (typeName.equals("Map")){
+                // Map类型
+                return typeName;
+            }else {
+                // 实体类型
+                return typeResolveService.resolveEntity(clz, typeName);
+            }
+        }else {
+            return type.asString();
         }
     }
 }
