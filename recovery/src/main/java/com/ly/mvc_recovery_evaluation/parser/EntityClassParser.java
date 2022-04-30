@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 提取实体类的属性
  * @author liuyue
  * @date 2022/4/29 19:37
  */

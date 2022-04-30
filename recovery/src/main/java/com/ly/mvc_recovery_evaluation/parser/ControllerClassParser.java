@@ -42,6 +42,7 @@ public class ControllerClassParser {
                 try {
                     CompilationUnit compilationUnit = new JavaParser().parse(controllerFile).getResult().get();
                     compilationUnit.accept(controllerClassVisitor, controllerClassDescription);
+                    System.out.println(controllerClassDescription);
                 }catch (Exception e){
                     e.printStackTrace();
                 }

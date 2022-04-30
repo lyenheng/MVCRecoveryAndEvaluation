@@ -1,7 +1,5 @@
 package com.ly.mvc_recovery_evaluation.visitor;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -17,7 +15,7 @@ import com.ly.mvc_recovery_evaluation.entity.ApiParameterInfo;
 import com.ly.mvc_recovery_evaluation.enums.RequestParameterType;
 import com.ly.mvc_recovery_evaluation.enums.RequestType;
 import com.ly.mvc_recovery_evaluation.parser.EntityClassParser;
-import com.ly.mvc_recovery_evaluation.service.CommonService;
+import com.ly.mvc_recovery_evaluation.service.TypeResolveService;
 import com.ly.mvc_recovery_evaluation.util.AnnotationUtil;
 import com.ly.mvc_recovery_evaluation.util.ClassHandleUtil;
 import com.ly.mvc_recovery_evaluation.util.StrUtil;
@@ -37,10 +35,7 @@ import java.util.*;
 public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDescription> {
 
     @Autowired
-    private CommonService commonService;
-
-    @Autowired
-    private EntityClassParser entityClassParser;
+    private TypeResolveService typeResolveService;
 
     /**
      * 处理类
@@ -181,7 +176,8 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
                 if (!apiParameterInfo.getRequestParameterType().equals(RequestParameterType.NULL)
                         && !apiParameterInfo.getRequestParameterType().equals(RequestParameterType.OTHERS)
                 ){
-                    resolveParameter(clz, apiParameterInfo);
+
+                    apiParameterInfo.setResolvedParameterJSON(resolveParameter(clz, apiParameterInfo));
                 }
                 apiParameterInfos.add(apiParameterInfo);
             }
@@ -212,49 +208,16 @@ public class ControllerClassVisitor extends VoidVisitorAdapter<ControllerClassDe
 
         if (parameterTypeName.equals("List")){
             // List类型
-
-            StringBuilder json = new StringBuilder("[");
-            Optional<NodeList<Type>> typeArguments = parameterType.getTypeArguments();
-            if (typeArguments.isPresent()){
-                String typeName = ((ClassOrInterfaceType) typeArguments.get().get(0)).getNameAsString();
-                if (!ClassHandleUtil.isEntityType(typeName)){
-                    // 基础类
-                    json.append(typeName);
-                }else {
-                    // 实体类
-                    String fullyQualifiedName = commonService.getFullyQualifiedNameByClassName(clz, typeName);
-                    File searchFile = commonService.search(fullyQualifiedName);
-                    if (searchFile == null || !searchFile.exists()){
-                        json.append(typeName);
-                    }else {
-                        json.append(StrUtil.mapToJson(entityClassParser.parse(searchFile)));
-                    }
-
-                }
-            }
-
-            json.append("]");
-            return json.toString();
+            return typeResolveService.resolveList(clz, parameterType);
 
         }else if (parameterName.equals("Map")){
             // Map类型
-
+            HashMap<String, String> map = new HashMap<>();
+            map.put(parameterName, parameterTypeName);
+            return StrUtil.mapToJson(map);
         }else {
             // 实体对象
-            // 根据类名找到全限定类名
-            String fullyQualifiedName = commonService.getFullyQualifiedNameByClassName(clz, parameterTypeName);
-            // 根据全限定类名找到对应的文件
-            File searchFile = commonService.search(fullyQualifiedName);
-            if (searchFile == null || !searchFile.exists()){
-                HashMap<String, String> map = new HashMap<>();
-                map.put(parameterName, parameterTypeName);
-                return StrUtil.mapToJson(map);
-            }else {
-                Map<String, String> parse = entityClassParser.parse(searchFile);
-                return StrUtil.mapToJson(parse);
-            }
+            return typeResolveService.resolveEntity(clz,parameterTypeName);
         }
-
-        return null;
     }
 }
