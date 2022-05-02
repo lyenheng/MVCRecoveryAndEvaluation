@@ -1,10 +1,12 @@
 package com.ly.mvc_recovery_evaluation.builder;
 
+import com.ly.mvc_recovery_evaluation.bean.ProjectNode;
 import com.ly.mvc_recovery_evaluation.entity.ModuleCoordinate;
 import com.ly.mvc_recovery_evaluation.entity.ModuleDependencyGraph;
 import com.ly.mvc_recovery_evaluation.entity.ModuleDependencyGraphEdge;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.util.ModuleCoordinateConvertUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,8 +21,12 @@ import java.util.Map;
 @Component
 public class ModuleDependencyGraphBuilder {
 
-    public ModuleDependencyGraph build(List<ModuleNode> moduleNodes){
+    @Autowired
+    private ProjectNode projectNode;
 
+    public ModuleDependencyGraph build(){
+
+        List<ModuleNode> moduleNodes = projectNode.getModuleNodeList();
         ModuleDependencyGraph moduleDependencyGraph = new ModuleDependencyGraph();
         moduleDependencyGraph.setNodes(moduleNodes);
 

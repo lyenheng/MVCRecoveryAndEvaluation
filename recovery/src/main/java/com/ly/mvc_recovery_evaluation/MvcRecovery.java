@@ -91,7 +91,7 @@ public class MvcRecovery {
         }
 
         // 构建模块依赖图
-        ModuleDependencyGraph moduleDependencyGraph = moduleDependencyGraphBuilder.build(moduleNodes);
+        ModuleDependencyGraph moduleDependencyGraph = moduleDependencyGraphBuilder.build();
         projectNode.setModuleDependencyGraph(moduleDependencyGraph);
 
         return projectNode;
