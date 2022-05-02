@@ -1,6 +1,7 @@
 package com.ly.mvc_recovery_evaluation;
 
 import com.ly.mvc_recovery_evaluation.bean.ProjectNode;
+import com.ly.mvc_recovery_evaluation.builder.ClassRelationBuilder;
 import com.ly.mvc_recovery_evaluation.builder.ModuleDependencyGraphBuilder;
 import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.enums.ModuleType;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author liuyue
@@ -47,6 +49,9 @@ public class MvcRecovery {
 
     @Autowired
     private ModuleDependencyGraphBuilder moduleDependencyGraphBuilder;
+
+    @Autowired
+    private ClassRelationBuilder classRelationBuilder;
 
     public ProjectNode recover(File rootFile){
 
@@ -93,6 +98,9 @@ public class MvcRecovery {
         // 构建模块依赖图
         ModuleDependencyGraph moduleDependencyGraph = moduleDependencyGraphBuilder.build();
         projectNode.setModuleDependencyGraph(moduleDependencyGraph);
+
+        Map<String, List<String>> build = classRelationBuilder.build();
+        System.out.println(build);
 
         return projectNode;
     }
