@@ -48,6 +48,10 @@ public class ClassParser {
                 classDescription.setFile(file);
                 CompilationUnit compilationUnit = new JavaParser().parse(file).getResult().get();
                 compilationUnit.accept(classVisitor, classDescription);
+
+                // 提取注入信息
+                List<InjectionInfo> injectionInfos = new ArrayList<>();
+                classDescription.setInjectionInfos(injectionInfos);
                 compilationUnit.accept(injectionVisitor, classDescription);
 
                 if (classDescription.getClassType() == null){

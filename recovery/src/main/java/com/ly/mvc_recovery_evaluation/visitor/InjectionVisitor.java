@@ -54,10 +54,9 @@ public class InjectionVisitor extends VoidVisitorAdapter<ClassDescription> {
                         }
 
                     }
+                    arg.getInjectionInfos().add(injectionInfo);
                 }
             }
         }
-
-        System.out.println(n);
     }
 }
