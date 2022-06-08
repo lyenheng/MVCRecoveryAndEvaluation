@@ -31,6 +31,8 @@ public class ServiceClassDescription extends ClassDescription {
         this.setClassType(classDescription.getClassType());
         this.setFile(classDescription.getFile());
         this.setFullyQualifiedName(classDescription.getFullyQualifiedName());
+        this.setInjectionInfos(classDescription.getInjectionInfos());
+        this.setMethodDescriptionList(classDescription.getMethodDescriptionList());
     }
 
 }

@@ -8,6 +8,7 @@ import com.ly.mvc_recovery_evaluation.enums.ClassType;
 import com.ly.mvc_recovery_evaluation.util.FilePathConvertUtil;
 import com.ly.mvc_recovery_evaluation.visitor.ClassVisitor;
 import com.ly.mvc_recovery_evaluation.visitor.InjectionVisitor;
+import com.ly.mvc_recovery_evaluation.visitor.MethodVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,9 @@ public class ClassParser {
     @Autowired
     private InjectionVisitor injectionVisitor;
 
+    @Autowired
+    private MethodVisitor methodVisitor;
+
     public List<ClassDescription> parse(ModuleNode moduleNode){
 
         File javaFile = FilePathConvertUtil.getJavaFile(moduleNode);
@@ -46,8 +50,8 @@ public class ClassParser {
             // 如果是Java文件进行扫描
             try{
                 ClassDescription classDescription = new ClassDescription();
-                List<MethodDeclaration> methodDeclarations = new ArrayList<>();
-                classDescription.setMethodDeclarationList(methodDeclarations);
+                List<MethodDescription> methodDescriptionList = new ArrayList<>();
+                classDescription.setMethodDescriptionList(methodDescriptionList);
                 classDescription.setFile(file);
                 CompilationUnit compilationUnit = new JavaParser().parse(file).getResult().get();
                 compilationUnit.accept(classVisitor, classDescription);
@@ -56,6 +60,9 @@ public class ClassParser {
                 List<InjectionInfo> injectionInfos = new ArrayList<>();
                 classDescription.setInjectionInfos(injectionInfos);
                 compilationUnit.accept(injectionVisitor, classDescription);
+
+                // 提取函数调用信息
+                compilationUnit.accept(methodVisitor, classDescription);
 
                 if (classDescription.getClassType() == null){
                     classDescriptions.add(classDescription);

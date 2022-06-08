@@ -48,7 +48,7 @@ public class ClassRelationBuilder {
                         }
 
                         // 找到所有的实现类关系（接口 -> 实现类的list)
-                        if (interfaceServices.size() > 0) {
+                        if (interfaceServices != null && interfaceServices.size() > 0) {
                             for (String interfaceService : interfaceServices) {
                                 if (classToRelation.containsKey(interfaceService)) {
                                     classToRelation.get(interfaceService).add(classDescription.getFullyQualifiedName());
@@ -61,7 +61,7 @@ public class ClassRelationBuilder {
                         }
 
                         // 找到所有的继承类关系
-                        if (extendsServices.size() > 0) {
+                        if (extendsServices != null && extendsServices.size() > 0) {
                             for (String extendsService : extendsServices) {
                                 if (classToRelation.containsKey(extendsService)) {
                                     classToRelation.get(extendsService).add(classDescription.getFullyQualifiedName());

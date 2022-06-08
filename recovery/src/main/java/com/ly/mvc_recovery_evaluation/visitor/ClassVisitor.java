@@ -6,11 +6,15 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.ly.mvc_recovery_evaluation.entity.ClassDescription;
+import com.ly.mvc_recovery_evaluation.entity.InjectionInfo;
+import com.ly.mvc_recovery_evaluation.entity.MethodCalledNode;
+import com.ly.mvc_recovery_evaluation.entity.MethodDescription;
 import com.ly.mvc_recovery_evaluation.enums.ClassType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author liuyue
@@ -63,14 +67,4 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDescription> {
         arg.setFullyQualifiedName(fullyQualifiedName);
     }
 
-    /**
-     * 保存方法信息
-     * @param n
-     * @param arg
-     */
-    @Override
-    public void visit(MethodDeclaration n, ClassDescription arg) {
-        super.visit(n, arg);
-        arg.getMethodDeclarationList().add(n);
-    }
 }
