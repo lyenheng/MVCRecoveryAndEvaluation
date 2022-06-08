@@ -1,5 +1,6 @@
 package com.ly.mvc_recovery_evaluation.entity;
 
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.ly.mvc_recovery_evaluation.enums.ClassType;
 import lombok.Data;
 
@@ -37,5 +38,10 @@ public class ClassDescription {
      * 注入信息
      */
     private List<InjectionInfo> injectionInfos;
+
+    /**
+     * 方法信息
+     */
+    private List<MethodDeclaration> methodDeclarationList;
 
 }

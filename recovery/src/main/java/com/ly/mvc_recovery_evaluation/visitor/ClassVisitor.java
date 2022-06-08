@@ -2,6 +2,7 @@ package com.ly.mvc_recovery_evaluation.visitor;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.ly.mvc_recovery_evaluation.entity.ClassDescription;
@@ -60,5 +61,16 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDescription> {
             fullyQualifiedName = clz.getFullyQualifiedName().get();
         }
         arg.setFullyQualifiedName(fullyQualifiedName);
+    }
+
+    /**
+     * 保存方法信息
+     * @param n
+     * @param arg
+     */
+    @Override
+    public void visit(MethodDeclaration n, ClassDescription arg) {
+        super.visit(n, arg);
+        arg.getMethodDeclarationList().add(n);
     }
 }

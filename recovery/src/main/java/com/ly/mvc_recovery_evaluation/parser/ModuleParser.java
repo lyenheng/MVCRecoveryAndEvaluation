@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * @author liuyue
  * @date 2022/4/24 11:27
+ * 将项目转换成模块
  */
 @Component
 public class ModuleParser {
@@ -24,7 +25,6 @@ public class ModuleParser {
 
     @Autowired
     private ModuleTypeExtractor moduleTypeExtractor;
-
 
 
     public List<ModuleNode> parse(ProjectNode projectNode){

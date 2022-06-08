@@ -20,7 +20,7 @@ import java.util.Optional;
  * @author liuyue
  * @date 2022/4/30 15:38
  */
-@Component("test")
+@Component
 public class TypeResolveService {
 
     @Autowired

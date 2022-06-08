@@ -13,6 +13,7 @@ import java.io.File;
 /**
  * @author liuyue
  * @date 2022/4/24 20:21
+ * 解析模块配置信息
  */
 @Component
 public class ConfigParser {

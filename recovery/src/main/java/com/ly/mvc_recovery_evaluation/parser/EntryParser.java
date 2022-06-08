@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * @author liuyue
  * @date 2022/4/25 18:52
+ * 提取启动类信息
  */
 @Component
 public class EntryParser {

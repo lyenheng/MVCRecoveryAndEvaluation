@@ -29,13 +29,13 @@ public class TestController {
     @Autowired
     private CommonService service;
 
-    @Resource(name = "test")
+    @Autowired
     private TypeResolveService typeResolveService;
 
 
     @GetMapping("/recovery")
     public void testRecovery(){
-        File file = new File("E:\\keda\\project\\back\\dispatch-device-bind-backend");
+        File file = new File("D:\\keda\\dispatch-device-bind-backend-dev");
 //        File file = new File("E:\\seu\\MVC\\code\\MVCRecoveryEvaluation");
         mvcRecovery.recover(file);
     }

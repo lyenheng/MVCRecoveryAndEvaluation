@@ -2,6 +2,7 @@ package com.ly.mvc_recovery_evaluation.parser;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.enums.ClassType;
 import com.ly.mvc_recovery_evaluation.util.FilePathConvertUtil;
@@ -45,6 +46,8 @@ public class ClassParser {
             // 如果是Java文件进行扫描
             try{
                 ClassDescription classDescription = new ClassDescription();
+                List<MethodDeclaration> methodDeclarations = new ArrayList<>();
+                classDescription.setMethodDeclarationList(methodDeclarations);
                 classDescription.setFile(file);
                 CompilationUnit compilationUnit = new JavaParser().parse(file).getResult().get();
                 compilationUnit.accept(classVisitor, classDescription);

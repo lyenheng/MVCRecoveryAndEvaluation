@@ -54,4 +54,6 @@ public class ServiceClassVisitor extends VoidVisitorAdapter<ServiceClassDescript
         arg.setExtendsServices(extendsServices);
         arg.setInterfaceServices(interfaceServices);
     }
+
+
 }

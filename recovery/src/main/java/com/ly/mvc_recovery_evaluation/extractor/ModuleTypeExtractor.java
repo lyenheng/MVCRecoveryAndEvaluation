@@ -13,6 +13,7 @@ import java.io.IOException;
 /**
  * @author liuyue
  * @date 2022/4/24 13:45
+ * 提取模块类型  JAR / POM
  */
 @Component
 public class ModuleTypeExtractor {

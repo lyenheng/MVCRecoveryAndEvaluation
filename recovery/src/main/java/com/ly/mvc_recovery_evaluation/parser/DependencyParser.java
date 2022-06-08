@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * @author liuyue
  * @date 2022/4/24 16:04
+ * 解析模块pom声明的依赖
  */
 @Component
 public class DependencyParser {
