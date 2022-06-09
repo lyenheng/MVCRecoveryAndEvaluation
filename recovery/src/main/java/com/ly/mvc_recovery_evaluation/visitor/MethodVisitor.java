@@ -6,8 +6,10 @@ import com.ly.mvc_recovery_evaluation.entity.ClassDescription;
 import com.ly.mvc_recovery_evaluation.entity.InjectionInfo;
 import com.ly.mvc_recovery_evaluation.entity.MethodCalledNode;
 import com.ly.mvc_recovery_evaluation.entity.MethodDescription;
+import com.ly.mvc_recovery_evaluation.enums.MethodCalledType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,8 +67,12 @@ public class MethodVisitor extends VoidVisitorAdapter<ClassDescription> {
             String calledClassVarName = methodCalledNode.getCalledClassVarName();
             if (injectionMap.get(calledClassVarName) != null) {
                 methodCalledNode.setCalledClassFullyName(injectionMap.get(calledClassVarName));
+                methodCalledNode.setMethodCalledType(MethodCalledType.INJECT_CALLED);
                 return true;
-            } else {
+            } else if (StringUtils.isEmpty(calledClassVarName)){
+                methodCalledNode.setMethodCalledType(MethodCalledType.SELF_CALLED);
+                return true;
+            }else {
                 return false;
             }
         }).collect(Collectors.toList());

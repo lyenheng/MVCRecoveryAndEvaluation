@@ -34,6 +34,8 @@ public class MethodCalledVisitor extends VoidVisitorAdapter<MethodDescription> {
         if (scope.isPresent() && scope.get() instanceof NameExpr){
             NameExpr nameExpr = (NameExpr)scope.get();
             className = nameExpr.getNameAsString();
+        }else if (scope.isPresent() && scope.get() instanceof MethodCallExpr){
+            className = ((MethodCallExpr) scope.get()).getNameAsString();
         }
         if (!StringUtils.isEmpty(className)){
             methodCalledNode.setCalledClassVarName(className);

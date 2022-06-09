@@ -1,5 +1,6 @@
 package com.ly.mvc_recovery_evaluation.entity;
 
+import com.ly.mvc_recovery_evaluation.enums.MethodCalledType;
 import lombok.Data;
 
 /**
@@ -24,4 +25,9 @@ public class MethodCalledNode {
      * 被调用的方法名
      */
     private String calledMethodName;
+
+    /**
+     * 方法调用类型： 自调用/ 注入调用
+     */
+    private MethodCalledType methodCalledType;
 }
