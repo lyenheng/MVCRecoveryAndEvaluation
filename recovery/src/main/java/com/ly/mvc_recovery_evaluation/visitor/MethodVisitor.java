@@ -1,20 +1,16 @@
 package com.ly.mvc_recovery_evaluation.visitor;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.ly.mvc_recovery_evaluation.entity.ClassDescription;
-import com.ly.mvc_recovery_evaluation.entity.InjectionInfo;
-import com.ly.mvc_recovery_evaluation.entity.MethodCalledNode;
-import com.ly.mvc_recovery_evaluation.entity.MethodDescription;
+import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.enums.MethodCalledType;
+import com.ly.mvc_recovery_evaluation.extractor.MethodGranularityExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +23,9 @@ public class MethodVisitor extends VoidVisitorAdapter<ClassDescription> {
     @Autowired
     private MethodCalledVisitor methodCalledVisitor;
 
+    @Autowired
+    private MethodGranularityExtractor granularityExtractor;
+
     /**
      * 保存方法信息
      * @param n
@@ -36,14 +35,20 @@ public class MethodVisitor extends VoidVisitorAdapter<ClassDescription> {
     public void visit(MethodDeclaration n, ClassDescription arg) {
         super.visit(n, arg);
         MethodDescription methodDescription = new MethodDescription();
+
+        if (n.getBody().isPresent()){
+            BlockStmt blockStmt = n.getBody().get();
+            methodDescription.setGranularityDescription(granularityExtractor.extract(blockStmt));
+        }
+
         methodDescription.setMethodDeclaration(n);
         List<MethodCalledNode> methodCalledNodes = new ArrayList<>();
         methodDescription.setMethodCalledNodeList(methodCalledNodes);
 
         arg.getMethodDescriptionList().add(methodDescription);
 
+        // 函数调用信息
         n.accept(methodCalledVisitor, methodDescription );
-
         filterCalledMethod(arg, methodDescription);
 
     }

@@ -21,4 +21,14 @@ public class MethodDescription {
      * 调用的方法信息
      */
     private List<MethodCalledNode> methodCalledNodeList;
+
+    /**
+     * 方法粒度信息
+     */
+    private MethodGranularityDescription granularityDescription;
+
+    /**
+     * 方法圈复杂度
+     */
+    private Integer cyclomaticComplexity;
 }

@@ -13,9 +13,7 @@
         <module>evalution</module>
     </modules>
 
-
     <packaging>pom</packaging>
-
 
     <dependencies>
         <dependency>
@@ -23,6 +21,7 @@
             <artifactId>lombok</artifactId>
             <version>1.16.18</version>
         </dependency>
+
     </dependencies>
 
     <dependencyManagement>

@@ -40,7 +40,7 @@ public class ClassDescription {
     private List<InjectionInfo> injectionInfos;
 
     /**
-     * 方法调用信息
+     * 方法信息
      */
     private List<MethodDescription> methodDescriptionList;
 
