@@ -26,6 +26,9 @@ public class MethodVisitor extends VoidVisitorAdapter<ClassDescription> {
     @Autowired
     private MethodGranularityExtractor granularityExtractor;
 
+    @Autowired
+    private CyclomaticComplexityVisitor cyclomaticComplexityVisitor;
+
     /**
      * 保存方法信息
      * @param n
@@ -38,8 +41,13 @@ public class MethodVisitor extends VoidVisitorAdapter<ClassDescription> {
 
         if (n.getBody().isPresent()){
             BlockStmt blockStmt = n.getBody().get();
+            // 提取函数粒度信息
             methodDescription.setGranularityDescription(granularityExtractor.extract(blockStmt));
         }
+
+        // 方法圈复杂度（初始值为1）
+        methodDescription.setCyclomaticComplexity(1);
+        n.accept(cyclomaticComplexityVisitor, methodDescription);
 
         methodDescription.setMethodDeclaration(n);
         List<MethodCalledNode> methodCalledNodes = new ArrayList<>();

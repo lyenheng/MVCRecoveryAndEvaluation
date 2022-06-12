@@ -7,6 +7,9 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,13 +28,26 @@ public class ConfigExtractor {
 
             String port = YmlUtil.getProperty(map, "server.port");
             String contextPath = YmlUtil.getProperty(map, "server.servlet.context-path");
-            String dataSourceUrl = YmlUtil.getProperty(map, "spring.datasource.url");
             String activeFile = YmlUtil.getProperty(map, "spring.profiles.active");
+
+            Map<String, String> payload = new HashMap<>();
+            String[] keys = {
+                    "spring.datasource.url",
+                    "spring.data.mongodb.url",
+                    "spring.data.mongodb.database",
+                    "spring.data.mongodb.host",
+                    "spring.data.mongodb.port",
+                    "spring.redis.database",
+                    "spring.redis.host",
+                    "spring.redis.port"};
+            for (String key : keys) {
+                payload.put(key, YmlUtil.getProperty(map, key));
+            }
 
             applicationConfig.setPort(port);
             applicationConfig.setContextPath(contextPath);
-            applicationConfig.setDatasourceUrl(dataSourceUrl);
             applicationConfig.setActiveFile(activeFile);
+            applicationConfig.setPayload(payload);
 
         }catch (Exception e){
 //            e.printStackTrace();

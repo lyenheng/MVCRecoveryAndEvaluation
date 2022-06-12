@@ -2,6 +2,8 @@ package com.ly.mvc_recovery_evaluation.entity;
 
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * 配置文件信息
  * @author liuyue
@@ -21,12 +23,12 @@ public class ApplicationConfig {
     private String contextPath;
 
     /**
-     * 数据库连接
-     */
-    private String datasourceUrl;
-
-    /**
      * 激活的配置文件
      */
     private String activeFile;
+
+    /**
+     * 其他配置信息
+     */
+    private Map<String, String> payload;
 }

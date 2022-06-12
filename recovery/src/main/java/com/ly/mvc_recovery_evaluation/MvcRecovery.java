@@ -53,6 +53,9 @@ public class MvcRecovery {
     @Autowired
     private ClassRelationBuilder classRelationBuilder;
 
+    @Autowired
+    private DataBaseParser dataBaseParser;
+
     public ProjectNode recover(File rootFile){
 
         // 提取模块信息
@@ -93,7 +96,12 @@ public class MvcRecovery {
             controllerClassParser.parse(moduleNode);
             serviceClassParser.parse(moduleNode);
             daoClassParser.parse(moduleNode);
+
         }
+
+        // 解析数据库信息
+        List<DataBaseDescription> dataBaseDescriptionList = dataBaseParser.parse(projectNode.getApplicationConfig().getPayload());
+        System.out.println(dataBaseDescriptionList);
 
         // 构建模块依赖图
         ModuleDependencyGraph moduleDependencyGraph = moduleDependencyGraphBuilder.build();

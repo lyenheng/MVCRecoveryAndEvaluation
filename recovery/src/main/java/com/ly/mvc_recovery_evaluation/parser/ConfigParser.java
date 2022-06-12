@@ -43,11 +43,13 @@ public class ConfigParser {
                 if (!StringUtils.isEmpty(activeApplicationConfig.getContextPath())){
                     applicationConfig.setContextPath(activeApplicationConfig.getContextPath());
                 }
-                if (!StringUtils.isEmpty(activeApplicationConfig.getDatasourceUrl())){
-                    applicationConfig.setDatasourceUrl(activeApplicationConfig.getDatasourceUrl());
+                if (activeApplicationConfig.getPayload().size() > 0){
+                    applicationConfig.setPayload(activeApplicationConfig.getPayload());
                 }
+
             }
         }
+
         return applicationConfig;
     }
 }

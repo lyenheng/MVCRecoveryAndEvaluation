@@ -1,6 +1,7 @@
 package com.ly.mvc_recovery_evaluation.bean;
 
 import com.ly.mvc_recovery_evaluation.entity.ApplicationConfig;
+import com.ly.mvc_recovery_evaluation.entity.DataBaseDescription;
 import com.ly.mvc_recovery_evaluation.entity.ModuleDependencyGraph;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.enums.ProjectType;
@@ -46,4 +47,8 @@ public class ProjectNode {
      */
     private ModuleDependencyGraph moduleDependencyGraph;
 
+    /**
+     * 数据库连接信息
+     */
+    private List<DataBaseDescription> dataBaseDescriptionList;
 }

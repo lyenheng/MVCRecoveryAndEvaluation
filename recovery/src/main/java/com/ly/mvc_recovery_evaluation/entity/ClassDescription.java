@@ -1,6 +1,5 @@
 package com.ly.mvc_recovery_evaluation.entity;
 
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.ly.mvc_recovery_evaluation.enums.ClassType;
 import lombok.Data;
 
