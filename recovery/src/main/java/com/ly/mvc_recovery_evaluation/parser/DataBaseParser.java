@@ -3,6 +3,7 @@ package com.ly.mvc_recovery_evaluation.parser;
 import com.ly.mvc_recovery_evaluation.entity.DataBaseDescription;
 import com.ly.mvc_recovery_evaluation.enums.DataBaseType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class DataBaseParser {
     DataBaseDescription parseMysql(Map<String, String> payload){
         DataBaseDescription dataBaseDescription = new DataBaseDescription();
 
-        if (payload.get("spring.datasource.url") == null){
+        if (StringUtils.isEmpty(payload.get("spring.datasource.url"))){
             return null;
         }
 
@@ -54,6 +55,11 @@ public class DataBaseParser {
         dataBaseDescription.setDataBaseType(DataBaseType.MYSQL);
 
         parseUrl(dataBaseDescription, url);
+
+        if (StringUtils.isEmpty(dataBaseDescription.getPort())){
+            // 设置端口默认值
+            dataBaseDescription.setPort("3306");
+        }
         return dataBaseDescription;
     }
 
@@ -66,22 +72,24 @@ public class DataBaseParser {
     DataBaseDescription parseRedis(Map<String, String> payload){
         DataBaseDescription dataBaseDescription = new DataBaseDescription();
 
-        if (payload.get("spring.redis.database") != null || payload.get("spring.redis.host") != null || payload.get("spring.redis.port") != null){
+        if (!StringUtils.isEmpty(payload.get("spring.redis.database")) || !StringUtils.isEmpty(payload.get("spring.redis.host")) || !StringUtils.isEmpty(payload.get("spring.redis.port"))){
             dataBaseDescription.setDataBaseType(DataBaseType.REDIS);
         }else {
             return null;
         }
         // 数据库名
-        if (payload.get("spring.redis.database") != null){
+        if (!StringUtils.isEmpty(payload.get("spring.redis.database"))){
             dataBaseDescription.setDataBaseName(payload.get("spring.redis.database"));
         }
         // url
-        if (payload.get("spring.redis.host") != null){
+        if (!StringUtils.isEmpty(payload.get("spring.redis.host"))){
             dataBaseDescription.setUrl(payload.get("spring.redis.host"));
         }
         // 端口
-        if (payload.get("spring.redis.port") != null){
+        if (!StringUtils.isEmpty(payload.get("spring.redis.port"))){
             dataBaseDescription.setPort(payload.get("spring.redis.port"));
+        }else {
+            dataBaseDescription.setPort("6379");
         }
         return dataBaseDescription;
     }
@@ -94,23 +102,26 @@ public class DataBaseParser {
     DataBaseDescription parseMongodb(Map<String, String> payload){
         DataBaseDescription dataBaseDescription = new DataBaseDescription();
 
-        if (payload.get("spring.data.mongodb.url") != null){
+        if (!StringUtils.isEmpty(payload.get("spring.data.mongodb.url"))){
             dataBaseDescription.setDataBaseType(DataBaseType.MONGODB);
             String url = payload.get("spring.data.mongodb.url");
             parseUrl(dataBaseDescription, url);
-        }else if (payload.get("spring.data.mongodb.database") != null || payload.get("spring.data.mongodb.host") != null || payload.get("spring.data.mongodb.port") != null){
+        }else if (!StringUtils.isEmpty(payload.get("spring.data.mongodb.database")) || !StringUtils.isEmpty(payload.get("spring.data.mongodb.host")) || !StringUtils.isEmpty(payload.get("spring.data.mongodb.port"))){
             dataBaseDescription.setDataBaseType(DataBaseType.MONGODB);
             // 数据库名
-            if (payload.get("spring.data.mongodb.database") != null){
+            if (!StringUtils.isEmpty(payload.get("spring.data.mongodb.database"))){
                 dataBaseDescription.setDataBaseName(payload.get("spring.data.mongodb.database"));
             }
             // url
-            if (payload.get("spring.data.mongodb.host") != null){
+            if (!StringUtils.isEmpty(payload.get("spring.data.mongodb.host"))){
                 dataBaseDescription.setUrl(payload.get("spring.data.mongodb.host"));
             }
             // 端口
-            if (payload.get("spring.data.mongodb.port") != null){
+            if (!StringUtils.isEmpty(payload.get("spring.data.mongodb.port"))){
                 dataBaseDescription.setPort(payload.get("spring.data.mongodb.port"));
+            }else {
+                // 默认值
+                dataBaseDescription.setPort("27017");
             }
         }else{
             return null;
