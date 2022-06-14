@@ -24,7 +24,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void add(ProjectNodePO projectNodePO) {
-        ProjectNodePO save = projectNodeDao.save(projectNodePO);
+    public ProjectNodePO add(ProjectNodePO projectNodePO) {
+        return projectNodeDao.save(projectNodePO);
     }
 }

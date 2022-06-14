@@ -18,6 +18,9 @@ public class ProjectNodePO{
     @Column(name="id")
     private Long id;
 
+    @Column(name="procedure_id")
+    private Long procedureId;
+
     @Column(name="project_name")
     private String projectName;
 

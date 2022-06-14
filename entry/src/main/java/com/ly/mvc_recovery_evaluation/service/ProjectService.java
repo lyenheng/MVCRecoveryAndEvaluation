@@ -12,7 +12,7 @@ public interface ProjectService {
 
     List<ProjectNodePO> listProject();
 
-    void add(ProjectNodePO projectNodePO);
+    ProjectNodePO add(ProjectNodePO projectNodePO);
 
 
 }

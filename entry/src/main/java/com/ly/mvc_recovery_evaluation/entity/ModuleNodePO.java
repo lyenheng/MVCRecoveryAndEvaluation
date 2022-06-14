@@ -28,7 +28,7 @@ public class ModuleNodePO {
     private String moduleFilePath;
 
     @Column(name="module_type")
-    private Long moduleType;
+    private String moduleType;
 
     @Column(name="group_id")
     private String groupId;
