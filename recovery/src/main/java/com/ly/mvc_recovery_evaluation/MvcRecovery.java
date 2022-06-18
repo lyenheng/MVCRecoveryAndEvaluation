@@ -100,7 +100,11 @@ public class MvcRecovery {
         }
 
         // 解析数据库信息
-        List<DataBaseDescription> dataBaseDescriptionList = dataBaseParser.parse(projectNode.getApplicationConfig().getPayload());
+        if (projectNode.getApplicationConfig() != null &&
+                projectNode.getApplicationConfig().getPayload() != null &&
+                projectNode.getApplicationConfig().getPayload().size() > 0){
+            List<DataBaseDescription> dataBaseDescriptionList = dataBaseParser.parse(projectNode.getApplicationConfig().getPayload());
+        }
 
         // 构建模块依赖图
         ModuleDependencyGraph moduleDependencyGraph = moduleDependencyGraphBuilder.build();

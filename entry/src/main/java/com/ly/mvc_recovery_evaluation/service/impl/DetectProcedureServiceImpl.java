@@ -57,6 +57,9 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
     @Autowired
     private ClassService classService;
 
+    @Autowired
+    private FileUploadService fileUploadService;
+
     @Value("${project.repository.path}")
     private String repositoryPath;
 
@@ -64,7 +67,7 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
     public void startDetect(DetectProcedureVO detectProcedureVO) {
         DetectProcedure detectProcedure = new DetectProcedure();
 
-        detectProcedure.setName(detectProcedure.getName());
+        detectProcedure.setName(detectProcedureVO.getName());
         detectProcedure.setDescription(detectProcedureVO.getDescription());
         detectProcedure.setBeginTime(new Date());
         detectProcedure.setStatus("检测中");
@@ -72,8 +75,9 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         // 新增检测记录
         detectProcedure = save(detectProcedure);
 
-        // todo 保存文件
-
+        // 上传文件
+        String projectName = detectProcedure.getId() + "_" + detectProcedure.getName();
+        fileUploadService.uploadMultiFile(projectName, detectProcedureVO.getFiles());
 
         File file = new File(repositoryPath, detectProcedure.getId() + detectProcedure.getName());
 
