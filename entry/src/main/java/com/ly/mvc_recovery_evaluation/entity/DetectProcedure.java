@@ -22,6 +22,9 @@ public class DetectProcedure {
     @Column(name="name")
     private String name;
 
+    @Column(name="file_name")
+    private String fileName;
+
     @Column(name="description")
     private String description;
 

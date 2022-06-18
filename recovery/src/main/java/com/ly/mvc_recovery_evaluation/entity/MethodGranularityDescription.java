@@ -15,21 +15,21 @@ public class MethodGranularityDescription {
     /**
      * 总行数
      */
-    private Integer totalLine;
+    private Integer totalLine = 0;
 
     /**
      * 空行行数
      */
-    private Integer blankLine;
+    private Integer blankLine = 0;
 
     /**
      * 注释行数
      */
-    private Integer commentLine;
+    private Integer commentLine = 0;
 
     /**
      * 有效代码行数
      */
-    private Integer codeLine;
+    private Integer codeLine = 0;
 
 }

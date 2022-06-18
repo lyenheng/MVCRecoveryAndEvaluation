@@ -71,6 +71,9 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         detectProcedure.setDescription(detectProcedureVO.getDescription());
         detectProcedure.setBeginTime(new Date());
         detectProcedure.setStatus("检测中");
+        if (detectProcedureVO.getFiles() != null && detectProcedureVO.getFiles().length > 0){
+            detectProcedure.setFileName(detectProcedureVO.getFiles()[0].getOriginalFilename().split("/")[0]);
+        }
 
         // 新增检测记录
         detectProcedure = save(detectProcedure);
@@ -79,7 +82,7 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         String projectName = detectProcedure.getId() + "_" + detectProcedure.getName();
         fileUploadService.uploadMultiFile(projectName, detectProcedureVO.getFiles());
 
-        File file = new File(repositoryPath, detectProcedure.getId() + detectProcedure.getName());
+        File file = new File(repositoryPath, projectName);
 
         // 获取项目信息
         ProjectNode projectNode = mvcRecovery.recover(file);
@@ -184,10 +187,13 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         MethodDescriptionPO methodDescriptionPO = new MethodDescriptionPO();
         methodDescriptionPO.setClassDescriptionId(classDescriptionId);
         methodDescriptionPO.setName(methodDescription.getMethodDeclaration().getNameAsString());
-        methodDescriptionPO.setTotalLine(methodDescription.getGranularityDescription().getTotalLine());
-        methodDescriptionPO.setBlankLine(methodDescription.getGranularityDescription().getBlankLine());
-        methodDescriptionPO.setCommentLine(methodDescription.getGranularityDescription().getCommentLine());
-        methodDescriptionPO.setCodeLine(methodDescription.getGranularityDescription().getCodeLine());
+        if (methodDescription.getGranularityDescription() != null){
+            methodDescriptionPO.setTotalLine(methodDescription.getGranularityDescription().getTotalLine());
+            methodDescriptionPO.setBlankLine(methodDescription.getGranularityDescription().getBlankLine());
+            methodDescriptionPO.setCommentLine(methodDescription.getGranularityDescription().getCommentLine());
+            methodDescriptionPO.setCodeLine(methodDescription.getGranularityDescription().getCodeLine());
+        }
+
         methodDescriptionPO.setCyclomaticComplexity(methodDescription.getCyclomaticComplexity());
         return methodDescriptionPO;
     }
@@ -221,7 +227,9 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         classDescriptionPO.setModuleNodeId(moduleNodeId);
         classDescriptionPO.setName(classDescription.getName());
         classDescriptionPO.setFilePath(classDescription.getFile().getAbsolutePath());
-        classDescriptionPO.setClassType(classDescription.getClassType().toString());
+        if (classDescription.getClassType() != null){
+            classDescriptionPO.setClassType(classDescription.getClassType().toString());
+        }
         classDescription.setFullyQualifiedName(classDescription.getFullyQualifiedName());
 
         StringBuilder annotationStr = new StringBuilder();
@@ -311,11 +319,17 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         projectNodePO.setProcedureId(detectProcedureId);
         projectNodePO.setProjectName(projectNode.getProjectName());
         projectNodePO.setProjectFilePath(projectNode.getProjectFile().getAbsolutePath());
-        if (projectNode.getProjectType().equals(ProjectType.MVC)){
+
+        if(projectNode.getProjectType() == null){
             projectNodePO.setProjectType(ProjectType.MVC.toString());
         }else {
-            projectNodePO.setProjectType(ProjectType.OTHERS.toString());
+            if (projectNode.getProjectType().equals(ProjectType.MVC)){
+                projectNodePO.setProjectType(ProjectType.MVC.toString());
+            }else {
+                projectNodePO.setProjectType(ProjectType.OTHERS.toString());
+            }
         }
+
         projectNodePO.setPort(projectNode.getApplicationConfig().getPort());
         projectNodePO.setContextPath(projectNode.getApplicationConfig().getContextPath());
         projectNodePO.setActiveFile(projectNode.getApplicationConfig().getActiveFile());

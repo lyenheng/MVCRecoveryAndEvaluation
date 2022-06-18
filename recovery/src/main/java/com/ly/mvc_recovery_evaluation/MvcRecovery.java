@@ -104,6 +104,7 @@ public class MvcRecovery {
                 projectNode.getApplicationConfig().getPayload() != null &&
                 projectNode.getApplicationConfig().getPayload().size() > 0){
             List<DataBaseDescription> dataBaseDescriptionList = dataBaseParser.parse(projectNode.getApplicationConfig().getPayload());
+            projectNode.setDataBaseDescriptionList(dataBaseDescriptionList);
         }
 
         // 构建模块依赖图
