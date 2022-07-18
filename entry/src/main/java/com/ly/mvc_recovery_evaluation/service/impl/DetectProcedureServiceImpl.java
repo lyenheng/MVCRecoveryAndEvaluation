@@ -3,15 +3,24 @@ package com.ly.mvc_recovery_evaluation.service.impl;
 import com.ly.mvc_recovery_evaluation.MvcRecovery;
 import com.ly.mvc_recovery_evaluation.bean.ProjectNode;
 import com.ly.mvc_recovery_evaluation.dao.*;
+import com.ly.mvc_recovery_evaluation.dto.PageResult;
 import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.enums.ProjectType;
 import com.ly.mvc_recovery_evaluation.service.*;
 import com.ly.mvc_recovery_evaluation.vo.DetectProcedureVO;
 import com.ly.mvc_recovery_evaluation.vo.SearchProcedureVO;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityManager;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +32,9 @@ import java.util.Optional;
  */
 @Service
 public class DetectProcedureServiceImpl implements DetectProcedureService {
+
+    @Autowired
+    private JPAQueryFactory jpaQueryFactory;
 
     @Autowired
     private DetectProcedureDao detectProcedureDao;
@@ -368,8 +380,63 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
     }
 
     @Override
-    public List<DetectProcedure> listProcedure(SearchProcedureVO searchProcedureVO) {
-        List<DetectProcedure> all = detectProcedureDao.findAll();
-        return all;
+    public PageResult<DetectProcedure> listProcedure(SearchProcedureVO searchProcedureVO) {
+        PageRequest pageRequest = PageRequest.of(searchProcedureVO.getPageNo(), searchProcedureVO.getPageSize());
+        QueryResults<DetectProcedure> detectPage = findDetectPage(pageRequest, searchProcedureVO);
+
+        return convertQueryResults2PageResult(detectPage, searchProcedureVO.getPageSize(), searchProcedureVO.getPageNo());
+    }
+
+
+    private <T> PageResult<T> convertQueryResults2PageResult(QueryResults<T> page, int pageSize, int pageNo){
+        long total = page.getTotal();
+        long totalPages = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
+        PageResult<T> pageResult = new PageResult<>();
+        pageResult.setPageNo(pageNo);
+        pageResult.setPageSize(pageSize);
+        pageResult.setTotalElements(total);
+        pageResult.setTotalPages(totalPages);
+        pageResult.setData(page.getResults());
+        return pageResult;
+    }
+
+    /**
+     * 分页查询
+     * @param pageable
+     * @param searchProcedureVO
+     * @return
+     */
+    QueryResults<DetectProcedure> findDetectPage(Pageable pageable, SearchProcedureVO searchProcedureVO){
+        QDetectProcedure qDetectProcedure = QDetectProcedure.detectProcedure;
+
+        JPAQuery<DetectProcedure> jpaQuery = jpaQueryFactory
+                .select(Projections.fields(
+                        DetectProcedure.class,
+                        qDetectProcedure.id,
+                        qDetectProcedure.name,
+                        qDetectProcedure.description,
+                        qDetectProcedure.status,
+                        qDetectProcedure.beginTime,
+                        qDetectProcedure.endTime,
+                        qDetectProcedure.fileName,
+                        qDetectProcedure.projectSize,
+                        qDetectProcedure.log
+                        )
+                ).from(qDetectProcedure);
+
+        if (!StringUtils.isEmpty(searchProcedureVO.getKeyword())){
+            jpaQuery.where(qDetectProcedure.name.like("%" + searchProcedureVO.getKeyword() + "%"));
+        }
+
+        // 倒序
+        if (!StringUtils.isEmpty(searchProcedureVO.getDir()) && searchProcedureVO.getDir().equalsIgnoreCase("asc")){
+            jpaQuery.orderBy(qDetectProcedure.beginTime.asc());
+        }else {
+            jpaQuery.orderBy(qDetectProcedure.beginTime.desc());
+        }
+
+        jpaQuery.offset(pageable.getOffset()).limit(pageable.getPageSize());
+
+        return jpaQuery.fetchResults();
     }
 }

@@ -9,6 +9,11 @@ import lombok.Data;
 @Data
 public class SearchProcedureVO {
 
+    /**
+     * 关键字搜索
+     */
+    private String keyword;
+
     private Integer pageSize = 10;
 
     private Integer pageNo = 0;
@@ -18,5 +23,5 @@ public class SearchProcedureVO {
     /**
      *  asc / desc
      */
-    private String dir;
+    private String dir = "desc";
 }
