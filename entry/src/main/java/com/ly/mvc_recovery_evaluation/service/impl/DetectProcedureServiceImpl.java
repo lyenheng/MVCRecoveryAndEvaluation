@@ -152,6 +152,11 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
                 }
             }
         }
+
+        detectProcedure.setStatus("检测完成");
+        detectProcedure.setEndTime(new Date());
+        save(detectProcedure);
+
     }
 
     private void saveDatabaseInfo(Long projectNodeId, List<DataBaseDescription> dataBaseDescriptionList) {

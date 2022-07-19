@@ -23,7 +23,7 @@ public class DetectProcedureController {
     private DetectProcedureService detectProcedureService;
 
     @PostMapping("/startDetect")
-    public void startDetect(@RequestBody DetectProcedureVO detectProcedureVO){
+    public void startDetect(DetectProcedureVO detectProcedureVO){
         detectProcedureService.startDetect(detectProcedureVO);
     }
 
