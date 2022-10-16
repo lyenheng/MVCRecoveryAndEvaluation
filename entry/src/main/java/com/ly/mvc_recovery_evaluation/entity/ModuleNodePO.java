@@ -35,4 +35,13 @@ public class ModuleNodePO {
 
     @Column(name="artifact_id")
     private String artifactId;
+
+    @Column(name = "port")
+    private String port;
+
+    @Column(name = "context_path")
+    private String contextPath;
+
+    @Column(name = "active_file")
+    private String activeFile;
 }

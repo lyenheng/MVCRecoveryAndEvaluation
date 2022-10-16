@@ -7,6 +7,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ConfigExtractor {
 
         Yaml yaml = new Yaml();
         try {
-            Map map = yaml.loadAs(new FileInputStream(configFile), Map.class);
+            Map map = yaml.loadAs(Files.newInputStream(configFile.toPath()), Map.class);
 
             String port = YmlUtil.getProperty(map, "server.port");
             String contextPath = YmlUtil.getProperty(map, "server.servlet.context-path");
@@ -50,7 +51,7 @@ public class ConfigExtractor {
             applicationConfig.setPayload(payload);
 
         }catch (Exception e){
-//            e.printStackTrace();
+            e.printStackTrace();
         }
         return applicationConfig;
     }

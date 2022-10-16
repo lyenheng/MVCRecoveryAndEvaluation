@@ -72,6 +72,9 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
     @Autowired
     private FileUploadService fileUploadService;
 
+    @Autowired
+    private ModuleDependencyGraphDao moduleDependencyGraphDao;
+
     @Value("${project.repository.path}")
     private String repositoryPath;
 
@@ -103,9 +106,8 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         ProjectNodePO projectNodePO = saveProjectNodePO(detectProcedure.getId(), projectNode);
         Long projectNodeId = projectNodePO.getId();
 
-        // 保存数据库连接信息
-        List<DataBaseDescription> dataBaseDescriptionList = projectNode.getDataBaseDescriptionList();
-        saveDatabaseInfo(projectNodeId, dataBaseDescriptionList);
+        // 保存模块依赖图到mongoDB中
+        moduleDependencyGraphDao.add(detectProcedure.getId(), projectNode.getModuleDependencyGraph());
 
         List<ModuleNode> moduleNodeList = projectNode.getModuleNodeList();
         if (moduleNodeList != null && moduleNodeList.size() > 0){
@@ -118,6 +120,10 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
                 // 保存模块依赖信息
                 List<ModuleCoordinate> moduleDependencies = moduleNode.getModuleDependencies();
                 saveModuleDependency(moduleDependencies, moduleNodeId);
+
+                // 保存数据库连接信息
+                List<DataBaseDescription> dataBaseDescriptionList = moduleNode.getDataBaseDescriptionList();
+                saveDatabaseInfo(moduleNodeId, dataBaseDescriptionList);
 
                 // 保存启动类信息
                 List<EntryNode> entryNodes = moduleNode.getEntryNodes();
@@ -159,11 +165,11 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
 
     }
 
-    private void saveDatabaseInfo(Long projectNodeId, List<DataBaseDescription> dataBaseDescriptionList) {
+    private void saveDatabaseInfo(Long moduleNodeId, List<DataBaseDescription> dataBaseDescriptionList) {
         if (dataBaseDescriptionList != null && dataBaseDescriptionList.size() > 0){
             for (DataBaseDescription dataBaseDescription : dataBaseDescriptionList) {
                 DatabaseDescriptionPO databaseDescriptionPO = new DatabaseDescriptionPO();
-                databaseDescriptionPO.setProjectNodeId(projectNodeId);
+                databaseDescriptionPO.setModuleNodeId(moduleNodeId);
                 databaseDescriptionPO.setDatabaseType(dataBaseDescription.getDataBaseType().toString());
                 databaseDescriptionPO.setUrl(dataBaseDescription.getUrl());
                 databaseDescriptionPO.setPort(dataBaseDescription.getPort());
@@ -322,6 +328,11 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         moduleNodePO.setModuleType(moduleNode.getModuleType().toString());
         moduleNodePO.setGroupId(moduleNode.getModuleCoordinate().getGroupId());
         moduleNodePO.setArtifactId(moduleNode.getModuleCoordinate().getArtifactId());
+        if (moduleNode.getApplicationConfig() != null){
+            moduleNodePO.setPort(moduleNode.getApplicationConfig().getPort());
+            moduleNodePO.setContextPath(moduleNode.getApplicationConfig().getContextPath());
+            moduleNodePO.setActiveFile(moduleNode.getApplicationConfig().getActiveFile());
+        }
         return moduleNodePO;
     }
 
@@ -347,9 +358,9 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
             }
         }
 
-        projectNodePO.setPort(projectNode.getApplicationConfig().getPort());
-        projectNodePO.setContextPath(projectNode.getApplicationConfig().getContextPath());
-        projectNodePO.setActiveFile(projectNode.getApplicationConfig().getActiveFile());
+//        projectNodePO.setPort(projectNode.getApplicationConfig().getPort());
+//        projectNodePO.setContextPath(projectNode.getApplicationConfig().getContextPath());
+//        projectNodePO.setActiveFile(projectNode.getApplicationConfig().getActiveFile());
 
         projectNodePO = projectService.add(projectNodePO);
         return projectNodePO;

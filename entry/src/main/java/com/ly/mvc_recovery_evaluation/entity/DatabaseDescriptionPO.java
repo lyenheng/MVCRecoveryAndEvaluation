@@ -18,8 +18,8 @@ public class DatabaseDescriptionPO {
     @Column(name="id")
     private Long id;
 
-    @Column(name="project_node_id")
-    private Long projectNodeId;
+    @Column(name="module_node_id")
+    private Long moduleNodeId;
 
     @Column(name="database_type")
     private String databaseType;

@@ -42,4 +42,14 @@ public class ModuleNode {
      * 基础类信息
      */
     private List<ClassDescription> classDescriptions;
+
+    /**
+     * 配置文件信息
+     */
+    private ApplicationConfig applicationConfig;
+
+    /**
+     * 数据库连接信息
+     */
+    private List<DataBaseDescription> dataBaseDescriptionList;
 }

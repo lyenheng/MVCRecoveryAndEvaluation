@@ -12,5 +12,5 @@ public interface DatabaseService {
 
     Long add(DatabaseDescriptionPO databaseDescriptionPO);
 
-    List<DatabaseDescriptionPO> findByProject(Long projectId);
+    List<DatabaseDescriptionPO> findByModule(Long moduleId);
 }

@@ -38,14 +38,14 @@ public class ProjectNode {
     private List<ModuleNode> moduleNodeList;
 
     /**
-     * 配置文件信息
-     */
-    private ApplicationConfig applicationConfig;
-
-    /**
      * 模块依赖图
      */
     private ModuleDependencyGraph moduleDependencyGraph;
+
+    /**
+     * 配置文件信息
+     */
+    private ApplicationConfig applicationConfig;
 
     /**
      * 数据库连接信息

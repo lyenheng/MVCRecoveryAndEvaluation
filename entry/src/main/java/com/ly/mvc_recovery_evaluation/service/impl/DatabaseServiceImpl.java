@@ -25,8 +25,8 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public List<DatabaseDescriptionPO> findByProject(Long projectId) {
-        List<DatabaseDescriptionPO> databaseDescriptionPOS = databaseDescriptionDao.findAllByProjectNodeIdEquals(projectId);
+    public List<DatabaseDescriptionPO> findByModule(Long moduleId) {
+        List<DatabaseDescriptionPO> databaseDescriptionPOS = databaseDescriptionDao.findAllByModuleNodeIdEquals(moduleId);
         return databaseDescriptionPOS;
     }
 }

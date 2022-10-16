@@ -13,5 +13,5 @@ import java.util.List;
 @Repository
 public interface DatabaseDescriptionDao extends JpaRepository<DatabaseDescriptionPO, Long> {
 
-    List<DatabaseDescriptionPO> findAllByProjectNodeIdEquals(Long projectId);
+    List<DatabaseDescriptionPO> findAllByModuleNodeIdEquals(Long moduleId);
 }
