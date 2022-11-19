@@ -26,7 +26,11 @@ public class EntryServiceImpl implements EntryService {
 
     @Override
     public List<EntryNodePO> findByModule(Long moduleId) {
-        List<EntryNodePO> entryNodePOS = entryNodeDao.findAllByModuleNodeIdEquals(moduleId);
-        return entryNodePOS;
+        return entryNodeDao.findAllByModuleNodeIdEquals(moduleId);
+    }
+
+    @Override
+    public List<EntryNodePO> findAll() {
+        return entryNodeDao.findAll();
     }
 }

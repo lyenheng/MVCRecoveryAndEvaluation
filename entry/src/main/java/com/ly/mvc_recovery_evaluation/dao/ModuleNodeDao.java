@@ -14,4 +14,6 @@ import java.util.List;
 public interface ModuleNodeDao extends JpaRepository<ModuleNodePO, Long> {
 
     List<ModuleNodePO> findAllByProjectNodeIdEquals(Long projectId);
+
+    List<ModuleNodePO> findAllByProjectNodeIdIn(List<Long> projectId);
 }

@@ -13,4 +13,6 @@ public interface EntryService {
     Long add(EntryNodePO entryNodePO);
 
     List<EntryNodePO> findByModule(Long moduleId);
+
+    List<EntryNodePO> findAll();
 }

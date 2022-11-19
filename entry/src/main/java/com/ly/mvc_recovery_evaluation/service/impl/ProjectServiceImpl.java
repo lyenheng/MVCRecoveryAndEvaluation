@@ -27,4 +27,9 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectNodePO add(ProjectNodePO projectNodePO) {
         return projectNodeDao.save(projectNodePO);
     }
+
+    @Override
+    public List<ProjectNodePO> findAllProjectByDetectId(Long detectId) {
+        return projectNodeDao.findAllByProcedureId(detectId);
+    }
 }

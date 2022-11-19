@@ -14,5 +14,7 @@ public interface ProjectService {
 
     ProjectNodePO add(ProjectNodePO projectNodePO);
 
+    List<ProjectNodePO> findAllProjectByDetectId(Long detectId);
+
 
 }

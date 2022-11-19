@@ -14,4 +14,6 @@ import java.util.List;
 public interface ProjectNodeDao extends JpaRepository<ProjectNodePO, Long> {
 
     List<ProjectNodePO> findAll();
+
+    List<ProjectNodePO> findAllByProcedureId(Long detectId);
 }

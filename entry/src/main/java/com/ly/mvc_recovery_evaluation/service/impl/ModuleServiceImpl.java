@@ -30,4 +30,9 @@ public class ModuleServiceImpl implements ModuleService {
         List<ModuleNodePO> moduleNodePOList = moduleNodeDao.findAllByProjectNodeIdEquals(projectId);
         return moduleNodePOList;
     }
+
+    @Override
+    public List<ModuleNodePO> multiFindByProject(List<Long> projectIds) {
+        return moduleNodeDao.findAllByProjectNodeIdIn(projectIds);
+    }
 }
