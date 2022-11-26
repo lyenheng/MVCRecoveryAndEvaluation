@@ -23,9 +23,24 @@ public class MicroserviceModuleController {
     @Autowired
     private MicroServiceModuleService microServiceModuleService;
 
-    @GetMapping("/{detectId}")
+    /**
+     * 获取当前检测任务的所有子服务的入口模块
+     * @param detectId
+     * @return
+     */
+    @GetMapping("getMicroServiceModule/{detectId}")
     public List<ModuleNodePO> getMicroServiceModule(@PathVariable Long detectId) {
         return microServiceModuleService.findMicroServiceModuleByDetectId(detectId);
+    }
+
+    /**
+     * 根据子服务的入口模块id找到当前子服务对应的所有本地模块id
+     * @param moduleId
+     * @return
+     */
+    @GetMapping("modulesByEntryModule/{moduleId}")
+    public List<Long> getModulesByEntryModule(@PathVariable Long moduleId) {
+        return microServiceModuleService.findModulesByEntryModule(moduleId);
     }
 
 }

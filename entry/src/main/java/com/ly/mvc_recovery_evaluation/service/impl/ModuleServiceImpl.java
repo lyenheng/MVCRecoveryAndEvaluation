@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author liuyue
@@ -27,12 +28,22 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Override
     public List<ModuleNodePO> findByProject(Long projectId) {
-        List<ModuleNodePO> moduleNodePOList = moduleNodeDao.findAllByProjectNodeIdEquals(projectId);
-        return moduleNodePOList;
+        return moduleNodeDao.findAllByProjectNodeIdEquals(projectId);
     }
 
     @Override
     public List<ModuleNodePO> multiFindByProject(List<Long> projectIds) {
         return moduleNodeDao.findAllByProjectNodeIdIn(projectIds);
+    }
+
+    /**
+     * 根据moduleId找到projectId
+     * @param moduleId
+     * @return
+     */
+    @Override
+    public Long findProjectByModule(Long moduleId) {
+        Optional<ModuleNodePO> byId = moduleNodeDao.findById(moduleId);
+        return byId.map(ModuleNodePO::getProjectNodeId).orElse(null);
     }
 }

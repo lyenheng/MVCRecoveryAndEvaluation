@@ -11,4 +11,11 @@ import java.util.List;
 public interface MicroServiceModuleService {
 
     List<ModuleNodePO> findMicroServiceModuleByDetectId(Long detectId);
+
+    /**
+     * 根据入口模块id找到该子服务下的所有模块id
+     * @param entryModuleId
+     * @return
+     */
+    List<Long> findModulesByEntryModule(Long entryModuleId);
 }

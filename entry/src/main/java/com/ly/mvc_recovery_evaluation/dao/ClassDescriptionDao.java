@@ -13,5 +13,7 @@ import java.util.List;
 @Repository
 public interface ClassDescriptionDao extends JpaRepository<ClassDescriptionPO, Long> {
 
-    List<ClassDescriptionPO> findAllByModuleNodeIdEquals(Long ModuleId);
+    List<ClassDescriptionPO> findAllByModuleNodeIdEquals(Long moduleId);
+
+    List<ClassDescriptionPO> findAllByModuleNodeIdIn(List<Long> moduleIds);
 }

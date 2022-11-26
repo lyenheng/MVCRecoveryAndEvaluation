@@ -13,4 +13,13 @@ public interface ClassService {
     Long add(ClassDescriptionPO classDescriptionPO);
 
     List<ClassDescriptionPO> findByModule(Long moduleId);
+
+    List<ClassDescriptionPO> multiFindByModule(List<Long> moduleIds);
+
+    /**
+     * 根据入口模块id获取该子服务下的所有模块中的类信息
+     * @param entryModuleId
+     * @return
+     */
+    List<ClassDescriptionPO> getAllClassByEntryModule(Long entryModuleId);
 }
