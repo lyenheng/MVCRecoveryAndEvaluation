@@ -1,7 +1,9 @@
 package com.ly.mvc_recovery_evaluation.controller;
 
+import com.ly.mvc_recovery_evaluation.entity.DatabaseDescriptionPO;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNodePO;
 import com.ly.mvc_recovery_evaluation.service.MicroServiceModuleService;
+import com.ly.mvc_recovery_evaluation.vo.DependencyNode;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,5 +44,21 @@ public class MicroserviceModuleController {
     public List<Long> getModulesByEntryModule(@PathVariable Long moduleId) {
         return microServiceModuleService.findModulesByEntryModule(moduleId);
     }
+
+    /**
+     * 构造子服务模块依赖树
+     * @param moduleId
+     * @return
+     */
+    @GetMapping("moduleDependencyTree/{moduleId}")
+    public DependencyNode getModuleDependencyTree(@PathVariable Long moduleId) {
+        return microServiceModuleService.getModuleDependencyTree(moduleId);
+    }
+
+    @GetMapping("databaseInfo/{moduleId}")
+    public List<DatabaseDescriptionPO> getDatabaseInfo(@PathVariable Long moduleId) {
+        return microServiceModuleService.getDatabaseInfo(moduleId);
+    }
+
 
 }

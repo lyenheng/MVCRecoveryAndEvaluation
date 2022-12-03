@@ -1,6 +1,7 @@
 package com.ly.mvc_recovery_evaluation.service;
 
 import com.ly.mvc_recovery_evaluation.entity.ClassDescriptionPO;
+import com.ly.mvc_recovery_evaluation.vo.ClassDescriptionVO;
 
 import java.util.List;
 
@@ -21,5 +22,5 @@ public interface ClassService {
      * @param entryModuleId
      * @return
      */
-    List<ClassDescriptionPO> getAllClassByEntryModule(Long entryModuleId);
+    List<ClassDescriptionVO> getAllClassByEntryModule(Long entryModuleId);
 }

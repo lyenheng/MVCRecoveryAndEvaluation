@@ -1,12 +1,15 @@
 package com.ly.mvc_recovery_evaluation.service.impl;
 
+import com.ly.mvc_recovery_evaluation.dao.ModuleNodeDao;
 import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.service.*;
+import com.ly.mvc_recovery_evaluation.vo.DependencyNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,6 +31,12 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
 
     @Autowired
     private ModuleDependencyService moduleDependencyService;
+
+    @Autowired
+    private ModuleNodeDao moduleNodeDao;
+
+    @Autowired
+    private DatabaseService databaseService;
 
     @Override
     public List<ModuleNodePO> findMicroServiceModuleByDetectId(Long detectId) {
@@ -73,5 +82,57 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
         }
 
         return moduleIds;
+    }
+
+    @Override
+    public DependencyNode getModuleDependencyTree(Long moduleId) {
+
+        DependencyNode dependencyNode = new DependencyNode();
+
+        // 查找当前子服务的模块名
+        Optional<ModuleNodePO> byId = moduleNodeDao.findById(moduleId);
+        if (byId.isPresent()){
+            String moduleName = byId.get().getModuleName();
+            dependencyNode.setName(moduleName);
+        }
+
+        // 找到当前子服务下的所有模块
+        List<Long> moduleIds = findModulesByEntryModule(moduleId);
+
+        List<DependencyNode> children1 = new ArrayList<>();
+        // 遍历每个模块获取依赖信息
+        for (Long currentModuleId : moduleIds) {
+
+            // 构造一级树节点
+            Optional<ModuleNodePO> byId1 = moduleNodeDao.findById(currentModuleId);
+            if (byId1.isPresent()){
+                String moduleName = byId1.get().getModuleName();
+                DependencyNode dependencyNode1 = new DependencyNode();
+                dependencyNode1.setName(moduleName);
+
+                ArrayList<DependencyNode> children2 = new ArrayList<>();
+                // 构造二级树节点
+                List<ModuleDependencyPO> moduleDependencyPOS = moduleDependencyService.findByModule(currentModuleId);
+                if (moduleDependencyPOS != null && moduleDependencyPOS.size() > 0) {
+                    for (ModuleDependencyPO moduleDependencyPO : moduleDependencyPOS) {
+                        DependencyNode dependencyNode2 = new DependencyNode(moduleDependencyPO.getArtifactId(), null);
+                        children2.add(dependencyNode2);
+                    }
+                }
+
+                dependencyNode1.setChildren(children2);
+
+                children1.add(dependencyNode1);
+            }
+
+        }
+        dependencyNode.setChildren(children1);
+
+        return dependencyNode;
+    }
+
+    @Override
+    public List<DatabaseDescriptionPO> getDatabaseInfo(Long moduleId) {
+        return databaseService.findByModule(moduleId);
     }
 }

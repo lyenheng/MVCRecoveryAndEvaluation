@@ -1,6 +1,9 @@
 package com.ly.mvc_recovery_evaluation.service;
 
+import com.ly.mvc_recovery_evaluation.entity.DatabaseDescriptionPO;
+import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNodePO;
+import com.ly.mvc_recovery_evaluation.vo.DependencyNode;
 
 import java.util.List;
 
@@ -18,4 +21,18 @@ public interface MicroServiceModuleService {
      * @return
      */
     List<Long> findModulesByEntryModule(Long entryModuleId);
+
+    /**
+     * 构造子服务模块依赖树
+     * @param moduleId
+     * @return
+     */
+    DependencyNode getModuleDependencyTree(Long moduleId);
+
+    /**
+     * 获取数据库信息
+     * @param moduleId
+     * @return
+     */
+    List<DatabaseDescriptionPO> getDatabaseInfo(Long moduleId);
 }

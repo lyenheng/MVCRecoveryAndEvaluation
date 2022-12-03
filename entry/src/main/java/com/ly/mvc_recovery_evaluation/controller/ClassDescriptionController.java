@@ -3,6 +3,7 @@ package com.ly.mvc_recovery_evaluation.controller;
 import com.ly.mvc_recovery_evaluation.entity.ClassDescriptionPO;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNodePO;
 import com.ly.mvc_recovery_evaluation.service.ClassService;
+import com.ly.mvc_recovery_evaluation.vo.ClassDescriptionVO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class ClassDescriptionController {
 
 
     @GetMapping("getAllClassInfo/{entryModuleId}")
-    public List<ClassDescriptionPO> getAllClassInfo(@PathVariable Long entryModuleId) {
+    public List<ClassDescriptionVO> getAllClassInfo(@PathVariable Long entryModuleId) {
         return classService.getAllClassByEntryModule(entryModuleId);
     }
 }

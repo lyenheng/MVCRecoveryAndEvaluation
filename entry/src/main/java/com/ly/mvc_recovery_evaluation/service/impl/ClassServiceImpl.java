@@ -2,11 +2,15 @@ package com.ly.mvc_recovery_evaluation.service.impl;
 
 import com.ly.mvc_recovery_evaluation.dao.ClassDescriptionDao;
 import com.ly.mvc_recovery_evaluation.entity.ClassDescriptionPO;
+import com.ly.mvc_recovery_evaluation.entity.MethodDescriptionPO;
 import com.ly.mvc_recovery_evaluation.service.ClassService;
+import com.ly.mvc_recovery_evaluation.service.MethodService;
 import com.ly.mvc_recovery_evaluation.service.MicroServiceModuleService;
+import com.ly.mvc_recovery_evaluation.vo.ClassDescriptionVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +25,9 @@ public class ClassServiceImpl implements ClassService {
 
     @Autowired
     private MicroServiceModuleService microServiceModuleService;
+
+    @Autowired
+    private MethodService methodService;
 
     @Override
     public Long add(ClassDescriptionPO classDescriptionPO) {
@@ -44,9 +51,18 @@ public class ClassServiceImpl implements ClassService {
      * @return
      */
     @Override
-    public List<ClassDescriptionPO> getAllClassByEntryModule(Long entryModuleId) {
+    public List<ClassDescriptionVO> getAllClassByEntryModule(Long entryModuleId) {
         List<Long> modulesByEntryModule = microServiceModuleService.findModulesByEntryModule(entryModuleId);
-        return classDescriptionDao.findAllByModuleNodeIdIn(modulesByEntryModule);
+        List<ClassDescriptionPO> classDescriptionPOList = classDescriptionDao.findAllByModuleNodeIdIn(modulesByEntryModule);
+
+        ArrayList<ClassDescriptionVO> classDescriptionVOS = new ArrayList<>();
+        for (ClassDescriptionPO classDescriptionPO : classDescriptionPOList) {
+            // 获取每个类中的方法个数
+            List<MethodDescriptionPO> byClass = methodService.findByClass(classDescriptionPO.getId());
+            ClassDescriptionVO classDescriptionVO = new ClassDescriptionVO(classDescriptionPO, byClass.size());
+            classDescriptionVOS.add(classDescriptionVO);
+        }
+        return classDescriptionVOS;
     }
 
 
