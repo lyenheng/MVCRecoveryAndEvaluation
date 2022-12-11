@@ -12,7 +12,10 @@ import javax.persistence.Column;
 @Data
 public class ClassDescriptionVO extends ClassDescriptionPO {
 
+    private Long id;
     private Long moduleNodeId;
+
+    private String moduleName;
 
     private String name;
 
@@ -30,6 +33,7 @@ public class ClassDescriptionVO extends ClassDescriptionPO {
     private Integer methodNum;
 
     public ClassDescriptionVO(ClassDescriptionPO classDescriptionPO, Integer methodNum) {
+        this.id = classDescriptionPO.getId();
         this.moduleNodeId = classDescriptionPO.getModuleNodeId();
         this.name = classDescriptionPO.getName();
         this.filePath = classDescriptionPO.getFilePath();

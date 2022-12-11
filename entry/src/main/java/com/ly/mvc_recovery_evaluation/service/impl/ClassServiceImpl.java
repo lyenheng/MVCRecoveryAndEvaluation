@@ -3,9 +3,11 @@ package com.ly.mvc_recovery_evaluation.service.impl;
 import com.ly.mvc_recovery_evaluation.dao.ClassDescriptionDao;
 import com.ly.mvc_recovery_evaluation.entity.ClassDescriptionPO;
 import com.ly.mvc_recovery_evaluation.entity.MethodDescriptionPO;
+import com.ly.mvc_recovery_evaluation.entity.ModuleNodePO;
 import com.ly.mvc_recovery_evaluation.service.ClassService;
 import com.ly.mvc_recovery_evaluation.service.MethodService;
 import com.ly.mvc_recovery_evaluation.service.MicroServiceModuleService;
+import com.ly.mvc_recovery_evaluation.service.ModuleService;
 import com.ly.mvc_recovery_evaluation.vo.ClassDescriptionVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,9 @@ public class ClassServiceImpl implements ClassService {
 
     @Autowired
     private MethodService methodService;
+
+    @Autowired
+    private ModuleService moduleService;
 
     @Override
     public Long add(ClassDescriptionPO classDescriptionPO) {
@@ -60,7 +65,11 @@ public class ClassServiceImpl implements ClassService {
             // 获取每个类中的方法个数
             List<MethodDescriptionPO> byClass = methodService.findByClass(classDescriptionPO.getId());
             ClassDescriptionVO classDescriptionVO = new ClassDescriptionVO(classDescriptionPO, byClass.size());
+            // 获取模块名
+            ModuleNodePO module = moduleService.findById(classDescriptionVO.getModuleNodeId());
+            classDescriptionVO.setModuleName(module.getModuleName());
             classDescriptionVOS.add(classDescriptionVO);
+
         }
         return classDescriptionVOS;
     }

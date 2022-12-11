@@ -17,4 +17,6 @@ public interface ModuleService {
     List<ModuleNodePO> multiFindByProject(List<Long> projectIds);
 
     Long findProjectByModule(Long moduleId);
+
+    ModuleNodePO findById(Long moduleId);
 }

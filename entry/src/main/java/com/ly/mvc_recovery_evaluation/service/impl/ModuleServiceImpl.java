@@ -46,4 +46,9 @@ public class ModuleServiceImpl implements ModuleService {
         Optional<ModuleNodePO> byId = moduleNodeDao.findById(moduleId);
         return byId.map(ModuleNodePO::getProjectNodeId).orElse(null);
     }
+
+    @Override
+    public ModuleNodePO findById(Long moduleId) {
+        return moduleNodeDao.findById(moduleId).get();
+    }
 }

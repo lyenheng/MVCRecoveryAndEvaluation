@@ -253,7 +253,7 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         if (classDescription.getClassType() != null){
             classDescriptionPO.setClassType(classDescription.getClassType().toString());
         }
-        classDescription.setFullyQualifiedName(classDescription.getFullyQualifiedName());
+        classDescriptionPO.setFullyQualifiedName(classDescription.getFullyQualifiedName());
 
         StringBuilder annotationStr = new StringBuilder();
         List<String> annotations = classDescription.getAnnotations();
