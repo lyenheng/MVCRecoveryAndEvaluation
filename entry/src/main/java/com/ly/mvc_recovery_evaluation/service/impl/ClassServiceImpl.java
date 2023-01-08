@@ -74,5 +74,19 @@ public class ClassServiceImpl implements ClassService {
         return classDescriptionVOS;
     }
 
+    /**
+     * 根据全限定类名获取类信息
+     * @param fullyQualifiedName
+     * @return
+     */
+    @Override
+    public List<ClassDescriptionPO> findByFullyQualifiedName(String fullyQualifiedName) {
+        List<ClassDescriptionPO> classDescriptionPOS = classDescriptionDao.findClassDescriptionPOSByFullyQualifiedNameEndsWithIgnoreCase(fullyQualifiedName);
+        if (classDescriptionPOS.size() > 0){
+            return classDescriptionPOS;
+        }
+        return null;
+    }
+
 
 }

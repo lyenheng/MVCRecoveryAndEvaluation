@@ -1,5 +1,7 @@
 package com.ly.mvc_recovery_evaluation.service.impl;
 
+import com.ly.mvc_recovery_evaluation.entity.ClassDescriptionPO;
+import com.ly.mvc_recovery_evaluation.entity.MethodCalledNodePO;
 import com.ly.mvc_recovery_evaluation.entity.MethodDescriptionPO;
 import com.ly.mvc_recovery_evaluation.service.ClassService;
 import com.ly.mvc_recovery_evaluation.service.LayersRelationService;
@@ -109,12 +111,42 @@ public class LayersRelationServiceImpl implements LayersRelationService {
         for (ClassDescriptionVO aClass : allClass) {
             Long classId = aClass.getId();
             List<MethodDescriptionPO> methods = methodService.findByClass(classId);
-//            methodCalledService.findByMethod()
-
+            for (MethodDescriptionPO method : methods) {
+                List<MethodCalledNodePO> methodCalledNodes = methodCalledService.findByMethod(method.getId());
+                for (MethodCalledNodePO methodCalledNode : methodCalledNodes) {
+                    Long methodCalledId = getMethodCalledId(methodCalledNode, classId);
+                    links.add(new LayersRelationLink("method"+ methodCalledId , "method"+methodCalledNode.getId()));
+                }
+            }
         }
         layersRelationVO.setLinks(links);
-
-
         return layersRelationVO;
     }
+
+    /**
+     * 根据函数调用查找被调用的函数id
+     * @param methodCalledNodePO
+     * @return
+     */
+    Long getMethodCalledId(MethodCalledNodePO methodCalledNodePO, Long classId){
+        String calledMethodName = methodCalledNodePO.getCalledMthodName();
+        if (methodCalledNodePO.getCalledClassFullyName() != null){
+            // 若不是自调用，则查找被调用函数的类id
+            List<ClassDescriptionPO> classDescriptionPOList = classService.findByFullyQualifiedName(methodCalledNodePO.getCalledClassFullyName());
+            if (classDescriptionPOList != null && classDescriptionPOList.size() == 1){
+                classId = classDescriptionPOList.get(0).getId();
+            }
+        }
+
+        // 查找类的方法信息
+        List<MethodDescriptionPO> methods = methodService.findByClass(classId);
+        for (MethodDescriptionPO method : methods) {
+            if (calledMethodName.equalsIgnoreCase(method.getName())){
+                return method.getId();
+            }
+        }
+        return null;
+    }
+
+
 }

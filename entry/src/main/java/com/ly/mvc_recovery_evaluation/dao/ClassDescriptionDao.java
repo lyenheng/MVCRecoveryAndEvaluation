@@ -16,4 +16,6 @@ public interface ClassDescriptionDao extends JpaRepository<ClassDescriptionPO, L
     List<ClassDescriptionPO> findAllByModuleNodeIdEquals(Long moduleId);
 
     List<ClassDescriptionPO> findAllByModuleNodeIdIn(List<Long> moduleIds);
+
+    List<ClassDescriptionPO> findClassDescriptionPOSByFullyQualifiedNameEndsWithIgnoreCase(String fullyQualifiedName);
 }

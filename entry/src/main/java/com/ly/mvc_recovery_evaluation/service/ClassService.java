@@ -23,4 +23,6 @@ public interface ClassService {
      * @return
      */
     List<ClassDescriptionVO> getAllClassByEntryModule(Long entryModuleId);
+
+    List<ClassDescriptionPO> findByFullyQualifiedName(String fullyQualifiedName);
 }
