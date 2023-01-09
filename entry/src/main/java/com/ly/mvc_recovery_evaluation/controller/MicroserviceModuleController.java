@@ -64,7 +64,7 @@ public class MicroserviceModuleController {
     // 构造层次调用关系图数据
     @GetMapping("getLayersRelationData/{entryModuleId}")
     public LayersRelationVO getLayersRelationData(@PathVariable Long entryModuleId) {
-        return microServiceModuleService.getLayersRelationData(entryModuleId);
+        return microServiceModuleService.getLayersRelationDataNew(entryModuleId);
     }
 
 

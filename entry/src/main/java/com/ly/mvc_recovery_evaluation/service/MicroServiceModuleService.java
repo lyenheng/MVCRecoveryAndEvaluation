@@ -43,4 +43,6 @@ public interface MicroServiceModuleService {
      * @return
      */
     LayersRelationVO getLayersRelationData(Long entryModuleId);
+
+    LayersRelationVO getLayersRelationDataNew(Long entryModuleId);
 }

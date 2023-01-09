@@ -153,10 +153,10 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
 
         // 构造类别数据
         List<Category> categories = new ArrayList<>();
-        categories.add(new Category("A"));
-        categories.add(new Category("B"));
-        categories.add(new Category("C"));
-        categories.add(new Category("D"));
+        categories.add(new Category("Controller层"));
+        categories.add(new Category("Service层"));
+        categories.add(new Category("Dao层"));
+        categories.add(new Category("其他"));
         layersRelationVO.setCategories(categories);
 
         // 构造顶点数据
@@ -252,6 +252,89 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
         return layersRelationVO;
     }
 
+    @Override
+    public LayersRelationVO getLayersRelationDataNew(Long entryModuleId) {
+        LayersRelationVO layersRelationVO = new LayersRelationVO();
+
+        // 构造类别数据
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category("Controller层"));
+        categories.add(new Category("Service层"));
+        categories.add(new Category("Dao层"));
+        categories.add(new Category("其他"));
+        layersRelationVO.setCategories(categories);
+
+        // 构造顶点数据
+        ArrayList<LayersRelationNode> nodes = new ArrayList<>();
+        List<ClassDescriptionVO> allClass = classService.getAllClassByEntryModule(entryModuleId);
+
+        for (ClassDescriptionVO aClass : allClass) {
+            String classType = aClass.getClassType();
+            if (!StringUtils.isEmpty(classType)) {
+                if (classType.equalsIgnoreCase("CONTROLLER")) {
+                    // 添加方法结点
+                    List<MethodDescriptionPO> methods = methodService.findByClass(aClass.getId());
+                    for (MethodDescriptionPO method : methods) {
+                        if (method.getTotalLine() != null){
+                            nodes.add(new LayersRelationNode("method" + method.getId(), 0, aClass.getName() + "." + method.getName(), 15.0, (double) method.getTotalLine()));
+                        }else {
+                            nodes.add(new LayersRelationNode("method" + method.getId(), 0, aClass.getName() + "." + method.getName(), 15.0, 0.0));
+                        }
+                    }
+                } else if (classType.equalsIgnoreCase("SERVICE")) {
+                    // 添加方法结点
+                    List<MethodDescriptionPO> methods = methodService.findByClass(aClass.getId());
+                    for (MethodDescriptionPO method : methods) {
+                        if (method.getTotalLine() != null){
+                            nodes.add(new LayersRelationNode("method" + method.getId(), 1, aClass.getName() + "." + method.getName(), 15.0, (double) method.getTotalLine()));
+                        }else {
+                            nodes.add(new LayersRelationNode("method" + method.getId(), 1, aClass.getName() + "." + method.getName(), 15.0, 0.0));
+                        }
+                    }
+                } else if (classType.equalsIgnoreCase("DAO")) {
+                    // 添加方法结点
+                    List<MethodDescriptionPO> methods = methodService.findByClass(aClass.getId());
+                    for (MethodDescriptionPO method : methods) {
+                        if (method.getTotalLine() != null){
+                            nodes.add(new LayersRelationNode("method" + method.getId(), 2, aClass.getName() + "." + method.getName(), 15.0, (double) method.getTotalLine()));
+                        }else {
+                            nodes.add(new LayersRelationNode("method" + method.getId(), 2, aClass.getName() + "." + method.getName(), 15.0, 0.0));
+                        }
+                    }
+                } else {
+                    // 添加方法结点
+                    List<MethodDescriptionPO> methods = methodService.findByClass(aClass.getId());
+                    for (MethodDescriptionPO method : methods) {
+                        if (method.getTotalLine() != null){
+                            nodes.add(new LayersRelationNode("method" + method.getId(), 3, aClass.getName() + "." + method.getName(), 15.0, (double) method.getTotalLine()));
+                        }else {
+                            nodes.add(new LayersRelationNode("method" + method.getId(), 3, aClass.getName() + "." + method.getName(), 15.0, 0.0));
+                        }
+                    }
+                }
+            }
+        }
+
+        layersRelationVO.setNodes(nodes);
+
+        // 构造边数据
+        List<LayersRelationLink> links = new ArrayList<>();
+
+        for (ClassDescriptionVO aClass : allClass) {
+            Long classId = aClass.getId();
+            List<MethodDescriptionPO> methods = methodService.findByClass(classId);
+            for (MethodDescriptionPO method : methods) {
+                List<MethodCalledNodePO> methodCalledNodes = methodCalledService.findByMethod(method.getId());
+                for (MethodCalledNodePO methodCalledNode : methodCalledNodes) {
+                    Long methodCalledId = getMethodCalledId(methodCalledNode, classId);
+                    links.add(new LayersRelationLink( "method"+methodCalledNode.getMethodDescriptionId(), "method"+ methodCalledId ));
+                }
+            }
+        }
+        layersRelationVO.setLinks(links);
+        return layersRelationVO;
+    }
+
     /**
      * 根据函数调用查找被调用的函数id
      * @param methodCalledNodePO
@@ -261,7 +344,27 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
         String calledMethodName = methodCalledNodePO.getCalledMthodName();
         if (methodCalledNodePO.getCalledClassFullyName() != null){
             // 若不是自调用，则查找被调用函数的类id
-            List<ClassDescriptionPO> classDescriptionPOList = classService.findByFullyQualifiedName(methodCalledNodePO.getCalledClassFullyName());
+            String qualifiedFullyName = methodCalledNodePO.getCalledClassFullyName();
+            StringBuilder newQualifiedFullyName = new StringBuilder();
+            if (qualifiedFullyName.endsWith("Service")){
+                String[] split = qualifiedFullyName.split("\\.");
+                for (int i = 0; i < split.length; i++) {
+                    if (i == split.length - 1) {
+                        newQualifiedFullyName.append(split[i]);
+                    }else {
+                        newQualifiedFullyName.append(split[i]).append(".");
+                        if (i == split.length - 2) {
+                            newQualifiedFullyName.append("impl.");
+                        }
+                    }
+                }
+            }
+            List<ClassDescriptionPO> classDescriptionPOList;
+            if (newQualifiedFullyName.length() > 0){
+                classDescriptionPOList = classService.findByFullyQualifiedName(newQualifiedFullyName.toString());
+            }else {
+                classDescriptionPOList = classService.findByFullyQualifiedName(qualifiedFullyName);
+            }
             if (classDescriptionPOList != null && classDescriptionPOList.size() == 1){
                 classId = classDescriptionPOList.get(0).getId();
             }
