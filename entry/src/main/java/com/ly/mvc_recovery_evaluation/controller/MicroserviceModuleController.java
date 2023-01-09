@@ -4,6 +4,7 @@ import com.ly.mvc_recovery_evaluation.entity.DatabaseDescriptionPO;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNodePO;
 import com.ly.mvc_recovery_evaluation.service.MicroServiceModuleService;
 import com.ly.mvc_recovery_evaluation.vo.DependencyNode;
+import com.ly.mvc_recovery_evaluation.vo.LayersRelationVO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +59,12 @@ public class MicroserviceModuleController {
     @GetMapping("databaseInfo/{moduleId}")
     public List<DatabaseDescriptionPO> getDatabaseInfo(@PathVariable Long moduleId) {
         return microServiceModuleService.getDatabaseInfo(moduleId);
+    }
+
+    // 构造层次调用关系图数据
+    @GetMapping("getLayersRelationData/{entryModuleId}")
+    public LayersRelationVO getLayersRelationData(@PathVariable Long entryModuleId) {
+        return microServiceModuleService.getLayersRelationData(entryModuleId);
     }
 
 

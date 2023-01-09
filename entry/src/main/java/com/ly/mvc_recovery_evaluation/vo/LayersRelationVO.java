@@ -13,7 +13,7 @@ import java.util.List;
 public class LayersRelationVO {
 
     // 类别
-    private List<String> categories;
+    private List<Category> categories;
 
     // 顶点
     private List<LayersRelationNode> nodes;

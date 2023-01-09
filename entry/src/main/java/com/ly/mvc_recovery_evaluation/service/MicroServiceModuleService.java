@@ -4,6 +4,7 @@ import com.ly.mvc_recovery_evaluation.entity.DatabaseDescriptionPO;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNodePO;
 import com.ly.mvc_recovery_evaluation.vo.DependencyNode;
+import com.ly.mvc_recovery_evaluation.vo.LayersRelationVO;
 
 import java.util.List;
 
@@ -35,4 +36,11 @@ public interface MicroServiceModuleService {
      * @return
      */
     List<DatabaseDescriptionPO> getDatabaseInfo(Long moduleId);
+
+    /**
+     * 构造层间调用关系图
+     * @param entryModuleId
+     * @return
+     */
+    LayersRelationVO getLayersRelationData(Long entryModuleId);
 }
