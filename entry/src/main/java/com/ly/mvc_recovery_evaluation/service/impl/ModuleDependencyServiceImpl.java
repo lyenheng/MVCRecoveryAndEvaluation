@@ -26,7 +26,6 @@ public class ModuleDependencyServiceImpl implements ModuleDependencyService {
 
     @Override
     public List<ModuleDependencyPO> findByModule(Long moduleNodeId) {
-        List<ModuleDependencyPO> moduleDependencyPOS = moduleDependencyDao.findAllByModuleNodeIdEquals(moduleNodeId);
-        return moduleDependencyPOS;
+        return moduleDependencyDao.findAllByModuleNodeIdEquals(moduleNodeId);
     }
 }

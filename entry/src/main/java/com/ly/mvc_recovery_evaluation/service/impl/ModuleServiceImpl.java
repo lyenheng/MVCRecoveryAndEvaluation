@@ -51,4 +51,14 @@ public class ModuleServiceImpl implements ModuleService {
     public ModuleNodePO findById(Long moduleId) {
         return moduleNodeDao.findById(moduleId).get();
     }
+
+    @Override
+    public ModuleNodePO findByGroupIdAndArtifactId(String groupId, String artifactId, Long projectId){
+        List<ModuleNodePO> moduleNodePOS = moduleNodeDao.findByGroupIdAndArtifactIdAndProjectNodeIdEquals(groupId, artifactId, projectId);
+        if (moduleNodePOS != null && moduleNodePOS.size() == 1){
+            return moduleNodePOS.get(0);
+        }
+        return null;
+    }
+
 }

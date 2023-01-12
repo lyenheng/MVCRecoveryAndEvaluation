@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -64,30 +61,47 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
         return moduleNodePOS.stream().filter(moduleNodePO -> microServiceModuleIds.contains(moduleNodePO.getId())).collect(Collectors.toList());
 
     }
-
-    /**
-     * 根据入口模块id找到同一个服务下的模块
-     * @param entryModuleId
-     * @return
-     */
-    @Override
     public List<Long> findModulesByEntryModule(Long entryModuleId) {
         // 根据当前入口模块找到对应的projectId
         Long projectId = moduleService.findProjectByModule(entryModuleId);
 
-        // 当前模块的所有依赖信息
-        List<ModuleDependencyPO> moduleDependencyPOS = moduleDependencyService.findByModule(entryModuleId);
-        Set<ModuleCoordinate> moduleCoordinateSet = moduleDependencyPOS.stream().map(moduleDependencyPO -> new ModuleCoordinate(moduleDependencyPO.getGroupId(), moduleDependencyPO.getArtifactId())).collect(Collectors.toSet());
-
         // 当前projectId对应的所有模块
         List<ModuleNodePO> moduleNodePOs = moduleService.findByProject(projectId);
+        // 所有模块的坐标集合
+        Set<ModuleCoordinate> allModuleCoordinates = moduleNodePOs.stream().map(moduleNodePO -> new ModuleCoordinate(moduleNodePO.getGroupId(), moduleNodePO.getArtifactId())).collect(Collectors.toSet());
 
-        ArrayList<Long> moduleIds = new ArrayList<>();
+        List<Long> moduleIds = new ArrayList<>();
+        List<Long> currentModuleIds = new ArrayList<>();
 
-        for (ModuleNodePO moduleNodePO : moduleNodePOs) {
-            ModuleCoordinate moduleCoordinate = new ModuleCoordinate(moduleNodePO.getGroupId(), moduleNodePO.getArtifactId());
-            if (moduleCoordinateSet.contains(moduleCoordinate)){
-                moduleIds.add(moduleNodePO.getId());
+        // 入口模块的依赖信息
+        List<ModuleDependencyPO> moduleDependencyPOS = moduleDependencyService.findByModule(entryModuleId);
+        for (ModuleDependencyPO moduleDependencyPO : moduleDependencyPOS) {
+            ModuleCoordinate moduleCoordinate = new ModuleCoordinate(moduleDependencyPO.getGroupId(), moduleDependencyPO.getArtifactId());
+            if (allModuleCoordinates.contains(moduleCoordinate)){
+                ModuleNodePO moduleNodePO = moduleService.findByGroupIdAndArtifactId(moduleDependencyPO.getGroupId(), moduleDependencyPO.getArtifactId(), projectId);
+                if (moduleNodePO != null){
+                    moduleIds.add(moduleNodePO.getId());
+                    currentModuleIds.add(moduleNodePO.getId());
+                }
+            }
+        }
+
+        // 循环查找依赖的依赖
+        while (currentModuleIds.size() > 0){
+            List<Long> moduleIdList = new ArrayList<>(currentModuleIds);
+            currentModuleIds.clear();
+            for (Long moduleId : moduleIdList) {
+                List<ModuleDependencyPO> moduleDependencys = moduleDependencyService.findByModule(moduleId);
+                for (ModuleDependencyPO moduleDependencyPO : moduleDependencys) {
+                    ModuleCoordinate moduleCoordinate = new ModuleCoordinate(moduleDependencyPO.getGroupId(), moduleDependencyPO.getArtifactId());
+                    if (allModuleCoordinates.contains(moduleCoordinate)){
+                        ModuleNodePO moduleNodePO = moduleService.findByGroupIdAndArtifactId(moduleDependencyPO.getGroupId(), moduleDependencyPO.getArtifactId(), projectId);
+                        if (moduleNodePO != null){
+                            moduleIds.add(moduleNodePO.getId());
+                            currentModuleIds.add(moduleNodePO.getId());
+                        }
+                    }
+                }
             }
         }
 
@@ -107,8 +121,8 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
         }
 
         // 找到当前子服务下的所有模块
+//        List<Long> moduleIds = findModulesByEntryModule(moduleId);
         List<Long> moduleIds = findModulesByEntryModule(moduleId);
-
         List<DependencyNode> children1 = new ArrayList<>();
         // 遍历每个模块获取依赖信息
         for (Long currentModuleId : moduleIds) {
@@ -272,7 +286,7 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
             String classType = aClass.getClassType();
             if (!StringUtils.isEmpty(classType)) {
                 if (classType.equalsIgnoreCase("CONTROLLER")) {
-                    // 添加方法结点
+                    // 添加controller类型方法结点
                     List<MethodDescriptionPO> methods = methodService.findByClass(aClass.getId());
                     for (MethodDescriptionPO method : methods) {
                         if (method.getTotalLine() != null){
@@ -282,7 +296,7 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
                         }
                     }
                 } else if (classType.equalsIgnoreCase("SERVICE")) {
-                    // 添加方法结点
+                    // 添加service类型方法结点
                     List<MethodDescriptionPO> methods = methodService.findByClass(aClass.getId());
                     for (MethodDescriptionPO method : methods) {
                         if (method.getTotalLine() != null){
@@ -292,7 +306,7 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
                         }
                     }
                 } else if (classType.equalsIgnoreCase("DAO")) {
-                    // 添加方法结点
+                    // 添加dao类型方法结点
                     List<MethodDescriptionPO> methods = methodService.findByClass(aClass.getId());
                     for (MethodDescriptionPO method : methods) {
                         if (method.getTotalLine() != null){
@@ -302,7 +316,7 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
                         }
                     }
                 } else {
-                    // 添加方法结点
+                    // 添加其他类型方法结点
                     List<MethodDescriptionPO> methods = methodService.findByClass(aClass.getId());
                     for (MethodDescriptionPO method : methods) {
                         if (method.getTotalLine() != null){
@@ -310,6 +324,15 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
                         }else {
                             nodes.add(new LayersRelationNode("method" + method.getId(), 3, aClass.getName() + "." + method.getName(), 15.0, 0.0));
                         }
+                    }
+                }
+            }else {
+                List<MethodDescriptionPO> methods = methodService.findByClass(aClass.getId());
+                for (MethodDescriptionPO method : methods) {
+                    if (method.getTotalLine() != null){
+                        nodes.add(new LayersRelationNode("method" + method.getId(), 3, aClass.getName() + "." + method.getName(), 15.0, (double) method.getTotalLine()));
+                    }else {
+                        nodes.add(new LayersRelationNode("method" + method.getId(), 3, aClass.getName() + "." + method.getName(), 15.0, 0.0));
                     }
                 }
             }

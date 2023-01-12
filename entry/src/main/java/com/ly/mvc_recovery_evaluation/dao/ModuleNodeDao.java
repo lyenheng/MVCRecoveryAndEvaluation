@@ -17,4 +17,6 @@ public interface ModuleNodeDao extends JpaRepository<ModuleNodePO, Long> {
 
     List<ModuleNodePO> findAllByProjectNodeIdIn(List<Long> projectId);
 
+    List<ModuleNodePO> findByGroupIdAndArtifactIdAndProjectNodeIdEquals(String groupId, String artifactId, Long projectNodeId);
+
 }

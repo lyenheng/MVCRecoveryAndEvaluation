@@ -52,7 +52,6 @@ public class InjectionVisitor extends VoidVisitorAdapter<ClassDescription> {
                             String fullyQualifiedNameByClassName = commonService.getFullyQualifiedNameByClassName((ClassOrInterfaceDeclaration) parentNode.get(), ((ClassOrInterfaceType) variableType).getNameAsString());
                             injectionInfo.setFullyQualifiedName(fullyQualifiedNameByClassName);
                         }
-
                     }
                     arg.getInjectionInfos().add(injectionInfo);
                 }

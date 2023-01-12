@@ -57,6 +57,7 @@ public class ClassServiceImpl implements ClassService {
      */
     @Override
     public List<ClassDescriptionVO> getAllClassByEntryModule(Long entryModuleId) {
+//        List<Long> modulesByEntryModule = microServiceModuleService.findModulesByEntryModule(entryModuleId);
         List<Long> modulesByEntryModule = microServiceModuleService.findModulesByEntryModule(entryModuleId);
         List<ClassDescriptionPO> classDescriptionPOList = classDescriptionDao.findAllByModuleNodeIdIn(modulesByEntryModule);
 

@@ -19,4 +19,6 @@ public interface ModuleService {
     Long findProjectByModule(Long moduleId);
 
     ModuleNodePO findById(Long moduleId);
+
+    ModuleNodePO findByGroupIdAndArtifactId(String groupId, String artifactId, Long projectId);
 }
