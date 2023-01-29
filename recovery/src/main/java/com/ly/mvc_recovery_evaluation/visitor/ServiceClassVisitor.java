@@ -39,7 +39,7 @@ public class ServiceClassVisitor extends VoidVisitorAdapter<ServiceClassDescript
         NodeList<ClassOrInterfaceType> extendedTypes = clz.getExtendedTypes();
         if (extendedTypes != null && extendedTypes.size() > 0){
             for (ClassOrInterfaceType extendedType : extendedTypes) {
-                interfaceServices.add(commonService.getFullyQualifiedNameByClassName(clz, extendedType.getNameAsString())) ;
+                extendsServices.add(commonService.getFullyQualifiedNameByClassName(clz, extendedType.getNameAsString())) ;
             }
         }
 
@@ -47,7 +47,7 @@ public class ServiceClassVisitor extends VoidVisitorAdapter<ServiceClassDescript
         NodeList<ClassOrInterfaceType> implementedTypes = clz.getImplementedTypes();
         if (implementedTypes != null && implementedTypes.size() > 0){
             for (ClassOrInterfaceType implementedType : implementedTypes) {
-                extendsServices.add(commonService.getFullyQualifiedNameByClassName(clz, implementedType.getNameAsString()));
+                interfaceServices.add(commonService.getFullyQualifiedNameByClassName(clz, implementedType.getNameAsString()));
             }
         }
 

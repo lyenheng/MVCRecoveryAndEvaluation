@@ -35,4 +35,13 @@ public class ClassDescriptionPO {
 
     @Column(name="annotations")
     private String annotations;
+
+    @Column(name="declaration_type")
+    private String declarationType;
+
+    @Column(name="interface_services")
+    private String interfaceServices;
+
+    @Column(name="extends_services")
+    private String extendsServices;
 }

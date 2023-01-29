@@ -43,5 +43,10 @@ public class ClassDescription {
      */
     private List<MethodDescription> methodDescriptionList;
 
+    /**
+     * 类型 Class Interface Enum等
+     */
+    private String declarationType;
+
 
 }

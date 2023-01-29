@@ -31,6 +31,11 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDescription> {
     @Override
     public void visit(ClassOrInterfaceDeclaration clz, ClassDescription arg) {
         super.visit(clz, arg);
+        if (clz.isInterface()) {
+            arg.setDeclarationType("INTERFACE");
+        }else {
+            arg.setDeclarationType("CLASS");
+        }
 
         // 注解信息
         NodeList<AnnotationExpr> annotations = clz.getAnnotations();

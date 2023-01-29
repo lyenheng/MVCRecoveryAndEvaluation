@@ -5,6 +5,7 @@ import com.ly.mvc_recovery_evaluation.bean.ProjectNode;
 import com.ly.mvc_recovery_evaluation.dao.*;
 import com.ly.mvc_recovery_evaluation.dto.PageResult;
 import com.ly.mvc_recovery_evaluation.entity.*;
+import com.ly.mvc_recovery_evaluation.enums.ClassType;
 import com.ly.mvc_recovery_evaluation.enums.ProjectType;
 import com.ly.mvc_recovery_evaluation.service.*;
 import com.ly.mvc_recovery_evaluation.vo.DetectProcedureVO;
@@ -250,6 +251,7 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         classDescriptionPO.setModuleNodeId(moduleNodeId);
         classDescriptionPO.setName(classDescription.getName());
         classDescriptionPO.setFilePath(classDescription.getFile().getAbsolutePath());
+        classDescriptionPO.setDeclarationType(classDescription.getDeclarationType());
         if (classDescription.getClassType() != null){
             classDescriptionPO.setClassType(classDescription.getClassType().toString());
         }
@@ -264,6 +266,37 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
             }
         }
         classDescriptionPO.setAnnotations(annotationStr.toString());
+
+        ClassType classType = classDescription.getClassType();
+
+        if (classType != null && classType.equals(ClassType.SERVICE)){
+            ServiceClassDescription serviceClassDescription = (ServiceClassDescription)classDescription;
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String interfaceService : serviceClassDescription.getInterfaceServices()) {
+                stringBuilder.append(interfaceService).append(";");
+            }
+            classDescriptionPO.setInterfaceServices(stringBuilder.toString());
+
+            StringBuilder stringBuilder1 = new StringBuilder();
+            for (String extendsService : serviceClassDescription.getExtendsServices()) {
+                stringBuilder1.append(extendsService).append(";");
+            }
+            classDescriptionPO.setExtendsServices(stringBuilder1.toString());
+
+        }else if (classType != null && classType.equals(ClassType.DAO)){
+            DaoClassDescription daoClassDescription = (DaoClassDescription)classDescription;
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String interfaceService : daoClassDescription.getInterfaceServices()) {
+                stringBuilder.append(interfaceService).append(";");
+            }
+            classDescriptionPO.setInterfaceServices(stringBuilder.toString());
+
+            StringBuilder stringBuilder1 = new StringBuilder();
+            for (String extendsService : daoClassDescription.getExtendsServices()) {
+                stringBuilder1.append(extendsService).append(";");
+            }
+            classDescriptionPO.setExtendsServices(stringBuilder1.toString());
+        }
         return classDescriptionPO;
     }
 

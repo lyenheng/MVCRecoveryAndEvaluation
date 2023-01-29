@@ -27,10 +27,16 @@ public class ClassDescriptionVO extends ClassDescriptionPO {
 
     private String annotations;
 
+    private String declarationType;
+
     /**
      * 类中包含的方法个数
      */
     private Integer methodNum;
+
+    private String interfaceServices;
+
+    private String extendsServices;
 
     public ClassDescriptionVO(ClassDescriptionPO classDescriptionPO, Integer methodNum) {
         this.id = classDescriptionPO.getId();
@@ -41,5 +47,8 @@ public class ClassDescriptionVO extends ClassDescriptionPO {
         this.fullyQualifiedName = classDescriptionPO.getFullyQualifiedName();
         this.annotations = classDescriptionPO.getAnnotations();
         this.methodNum = methodNum;
+        this.declarationType = classDescriptionPO.getDeclarationType();
+        this.interfaceServices = classDescriptionPO.getInterfaceServices();
+        this.extendsServices = classDescriptionPO.getExtendsServices();
     }
 }

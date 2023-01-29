@@ -26,7 +26,6 @@ public class MethodCalledServiceImpl implements MethodCalledService {
 
     @Override
     public List<MethodCalledNodePO> findByMethod(Long methodId) {
-        List<MethodCalledNodePO> methodCalledNodePOS = methodCalledNodeDao.findAllByMethodDescriptionIdEquals(methodId);
-        return methodCalledNodePOS;
+        return methodCalledNodeDao.findAllByMethodDescriptionIdEquals(methodId);
     }
 }

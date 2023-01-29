@@ -257,7 +257,7 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
             for (MethodDescriptionPO method : methods) {
                 List<MethodCalledNodePO> methodCalledNodes = methodCalledService.findByMethod(method.getId());
                 for (MethodCalledNodePO methodCalledNode : methodCalledNodes) {
-                    Long methodCalledId = getMethodCalledId(methodCalledNode, classId);
+                    Long methodCalledId = getMethodCalledId(allClass, methodCalledNode, classId);
                     links.add(new LayersRelationLink("method"+ methodCalledId , "method"+methodCalledNode.getId()));
                 }
             }
@@ -349,8 +349,10 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
             for (MethodDescriptionPO method : methods) {
                 List<MethodCalledNodePO> methodCalledNodes = methodCalledService.findByMethod(method.getId());
                 for (MethodCalledNodePO methodCalledNode : methodCalledNodes) {
-                    Long methodCalledId = getMethodCalledId(methodCalledNode, classId);
-                    links.add(new LayersRelationLink( "method"+methodCalledNode.getMethodDescriptionId(), "method"+ methodCalledId ));
+                    Long methodCalledId = getMethodCalledId(allClass, methodCalledNode, classId);
+                    if (methodCalledId != null){
+                        links.add(new LayersRelationLink( "method"+methodCalledNode.getMethodDescriptionId(), "method"+ methodCalledId ));
+                    }
                 }
             }
         }
@@ -363,33 +365,25 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
      * @param methodCalledNodePO
      * @return
      */
-    Long getMethodCalledId(MethodCalledNodePO methodCalledNodePO, Long classId){
+    Long getMethodCalledId(List<ClassDescriptionVO> allClass, MethodCalledNodePO methodCalledNodePO, Long classId){
         String calledMethodName = methodCalledNodePO.getCalledMthodName();
-        if (methodCalledNodePO.getCalledClassFullyName() != null){
-            // 若不是自调用，则查找被调用函数的类id
+        if (methodCalledNodePO.getMethodCalledType().equalsIgnoreCase("INJECT_CALLED")){
+            // 若是注入调用，则查找被调用函数的类id
             String qualifiedFullyName = methodCalledNodePO.getCalledClassFullyName();
-            StringBuilder newQualifiedFullyName = new StringBuilder();
-            if (qualifiedFullyName.endsWith("Service")){
-                String[] split = qualifiedFullyName.split("\\.");
-                for (int i = 0; i < split.length; i++) {
-                    if (i == split.length - 1) {
-                        newQualifiedFullyName.append(split[i]);
+
+            List<ClassDescriptionPO> currentClassList = classService.findByFullyQualifiedName(qualifiedFullyName);
+            if (currentClassList != null && currentClassList.size() > 0){
+                ClassDescriptionPO classDescriptionPO = currentClassList.get(0);
+                if (classDescriptionPO.getDeclarationType() != null && classDescriptionPO.getDeclarationType().equalsIgnoreCase("INTERFACE")){
+                    ClassDescriptionVO implementClass = getImplementClassByInterface(allClass, qualifiedFullyName);
+                    if (implementClass != null){
+                        classId = implementClass.getId();
                     }else {
-                        newQualifiedFullyName.append(split[i]).append(".");
-                        if (i == split.length - 2) {
-                            newQualifiedFullyName.append("impl.");
-                        }
+                        classId = classDescriptionPO.getId();
                     }
+                }else {
+                    classId = classDescriptionPO.getId();
                 }
-            }
-            List<ClassDescriptionPO> classDescriptionPOList;
-            if (newQualifiedFullyName.length() > 0){
-                classDescriptionPOList = classService.findByFullyQualifiedName(newQualifiedFullyName.toString());
-            }else {
-                classDescriptionPOList = classService.findByFullyQualifiedName(qualifiedFullyName);
-            }
-            if (classDescriptionPOList != null && classDescriptionPOList.size() == 1){
-                classId = classDescriptionPOList.get(0).getId();
             }
         }
 
@@ -398,6 +392,27 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
         for (MethodDescriptionPO method : methods) {
             if (calledMethodName.equalsIgnoreCase(method.getName())){
                 return method.getId();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据接口的全限定类名获取实现类
+     * @param classDescriptions
+     * @param interfaceQualifiedFullyName
+     * @return
+     */
+    private ClassDescriptionVO getImplementClassByInterface(List<ClassDescriptionVO> classDescriptions, String interfaceQualifiedFullyName){
+
+        for (ClassDescriptionVO classDescription : classDescriptions) {
+            if (classDescription.getInterfaceServices() != null){
+                String[] interfaceServices = classDescription.getInterfaceServices().split(";");
+                for (String interfaceService : interfaceServices) {
+                    if (interfaceQualifiedFullyName.equalsIgnoreCase(interfaceService)){
+                        return classDescription;
+                    }
+                }
             }
         }
         return null;
