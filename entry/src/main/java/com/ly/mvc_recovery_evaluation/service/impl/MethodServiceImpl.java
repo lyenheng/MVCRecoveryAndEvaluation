@@ -29,4 +29,9 @@ public class MethodServiceImpl implements MethodService {
         List<MethodDescriptionPO> methodDescriptionPOS = methodDescriptionDao.findAllByClassDescriptionIdEquals(classId);
         return methodDescriptionPOS;
     }
+
+    @Override
+    public MethodDescriptionPO findById(Long methodId) {
+        return methodDescriptionDao.findById(methodId).get();
+    }
 }

@@ -89,5 +89,10 @@ public class ClassServiceImpl implements ClassService {
         return null;
     }
 
+    @Override
+    public ClassDescriptionPO findById(Long classId) {
+        return classDescriptionDao.findById(classId).get();
+    }
+
 
 }

@@ -14,4 +14,6 @@ public interface MethodService {
 
     List<MethodDescriptionPO> findByClass(Long classId);
 
+    MethodDescriptionPO findById(Long methodId);
+
 }

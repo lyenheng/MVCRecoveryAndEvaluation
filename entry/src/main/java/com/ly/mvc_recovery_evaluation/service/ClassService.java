@@ -25,4 +25,6 @@ public interface ClassService {
     List<ClassDescriptionVO> getAllClassByEntryModule(Long entryModuleId);
 
     List<ClassDescriptionPO> findByFullyQualifiedName(String fullyQualifiedName);
+
+    ClassDescriptionPO findById(Long classId);
 }

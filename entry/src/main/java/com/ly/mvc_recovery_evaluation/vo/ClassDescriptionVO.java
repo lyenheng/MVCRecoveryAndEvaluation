@@ -3,7 +3,6 @@ package com.ly.mvc_recovery_evaluation.vo;
 import com.ly.mvc_recovery_evaluation.entity.ClassDescriptionPO;
 import lombok.Data;
 
-import javax.persistence.Column;
 
 /**
  * @author liuyue

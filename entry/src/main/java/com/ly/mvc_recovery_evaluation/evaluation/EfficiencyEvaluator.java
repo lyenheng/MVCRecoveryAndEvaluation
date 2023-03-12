@@ -1,4 +1,4 @@
-package com.ly.mvc_recovery_evaluation.efficiency;
+package com.ly.mvc_recovery_evaluation.evaluation;
 
 import com.ly.mvc_recovery_evaluation.entity.ClassDescription;
 import org.springframework.stereotype.Service;
@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class EfficiencyEvaluator {
+
+
     /**
-     * 模块化评估
-     * @param classDescriptions
+     * 时间特性评估
      */
-    public void evaluateModule(ClassDescription[] classDescriptions) {
+    public void evaluateTime () {
 
     }
 }

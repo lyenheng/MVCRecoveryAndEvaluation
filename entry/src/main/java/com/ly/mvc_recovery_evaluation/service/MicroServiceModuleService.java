@@ -1,8 +1,10 @@
 package com.ly.mvc_recovery_evaluation.service;
 
 import com.ly.mvc_recovery_evaluation.entity.DatabaseDescriptionPO;
+import com.ly.mvc_recovery_evaluation.entity.MethodCalledNodePO;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNode;
 import com.ly.mvc_recovery_evaluation.entity.ModuleNodePO;
+import com.ly.mvc_recovery_evaluation.vo.ClassDescriptionVO;
 import com.ly.mvc_recovery_evaluation.vo.DependencyNode;
 import com.ly.mvc_recovery_evaluation.vo.LayersRelationVO;
 
@@ -40,4 +42,6 @@ public interface MicroServiceModuleService {
     LayersRelationVO getLayersRelationData(Long entryModuleId);
 
     LayersRelationVO getLayersRelationDataNew(Long entryModuleId);
+
+    Long getMethodCalledId(List<ClassDescriptionVO> allClass, MethodCalledNodePO methodCalledNodePO, Long classId);
 }

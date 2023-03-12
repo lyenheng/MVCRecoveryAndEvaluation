@@ -14,4 +14,5 @@ import java.util.List;
 public interface MethodDescriptionDao extends JpaRepository<MethodDescriptionPO, Long> {
 
     List<MethodDescriptionPO> findAllByClassDescriptionIdEquals(Long classId);
+
 }

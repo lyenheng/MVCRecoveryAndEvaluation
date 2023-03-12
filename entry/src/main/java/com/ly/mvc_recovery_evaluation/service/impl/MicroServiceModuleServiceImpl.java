@@ -365,7 +365,7 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
      * @param methodCalledNodePO
      * @return
      */
-    Long getMethodCalledId(List<ClassDescriptionVO> allClass, MethodCalledNodePO methodCalledNodePO, Long classId){
+    public Long getMethodCalledId(List<ClassDescriptionVO> allClass, MethodCalledNodePO methodCalledNodePO, Long classId){
         String calledMethodName = methodCalledNodePO.getCalledMthodName();
         if (methodCalledNodePO.getMethodCalledType().equalsIgnoreCase("INJECT_CALLED")){
             // 若是注入调用，则查找被调用函数的类id
