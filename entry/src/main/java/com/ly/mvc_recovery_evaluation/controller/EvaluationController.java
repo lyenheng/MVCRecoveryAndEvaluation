@@ -33,8 +33,6 @@ public class EvaluationController {
 
     @GetMapping("/1/{entryModuleId}")
     public EvaluationPO getEvaluationResult1(@PathVariable Long entryModuleId) {
-
-
         return evaluationService.getResult1(entryModuleId);
     }
 }

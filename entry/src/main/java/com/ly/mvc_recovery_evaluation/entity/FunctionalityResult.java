@@ -26,7 +26,12 @@ public class FunctionalityResult {
     private List<String> requestTypeErrorClass;
 
     /**
-     * 请求错误错误类
+     * 请求注解缺失类
      */
-    private List<String> requestParamErrorClass;
+    private List<String> requestParamAnnotationLossClass;
+
+    /**
+     * 请求注解错误
+     */
+    private List<String> requestParamAnnotationErrorClass;
 }

@@ -7,6 +7,8 @@ import com.ly.mvc_recovery_evaluation.dto.PageResult;
 import com.ly.mvc_recovery_evaluation.entity.*;
 import com.ly.mvc_recovery_evaluation.enums.ClassType;
 import com.ly.mvc_recovery_evaluation.enums.ProjectType;
+import com.ly.mvc_recovery_evaluation.enums.RequestParameterType;
+import com.ly.mvc_recovery_evaluation.enums.RequestType;
 import com.ly.mvc_recovery_evaluation.service.*;
 import com.ly.mvc_recovery_evaluation.vo.DetectProcedureVO;
 import com.ly.mvc_recovery_evaluation.vo.SearchProcedureVO;
@@ -268,6 +270,31 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
         classDescriptionPO.setAnnotations(annotationStr.toString());
 
         ClassType classType = classDescription.getClassType();
+
+        if (classType != null && classType.equals(ClassType.CONTROLLER)) {
+            ControllerClassDescription controllerClassDescription = (ControllerClassDescription)classDescription;
+            List<ApiInfo> apiInfos = controllerClassDescription.getApiInfos();
+            for (ApiInfo apiInfo : apiInfos) {
+                // 请求类型是否正确
+                if (apiInfo.getRequestType().equals(RequestType.ALL)) {
+                    classDescriptionPO.setHasRequestTypeError(1);
+                }
+                List<ApiParameterInfo> apiParameterInfos = apiInfo.getApiParameterInfos();
+                int bodyParamSum = 0;
+                for (ApiParameterInfo apiParameterInfo : apiParameterInfos) {
+                    // 请求参数注解是否为空
+                    if (apiParameterInfo.getRequestParameterType().equals(RequestParameterType.NULL)){
+                        classDescriptionPO.setHasRequestParamAnnotationLoss(1);
+                    }else if (apiParameterInfo.getRequestParameterType().equals(RequestParameterType.BODY)) {
+                        bodyParamSum++;
+                        if (bodyParamSum > 1){
+                            // 请求参数注解body类型是否超过1
+                            classDescriptionPO.setHasRequestParamAnnotationError(1);
+                        }
+                    }
+                }
+            }
+        }
 
         if (classType != null && classType.equals(ClassType.SERVICE)){
             ServiceClassDescription serviceClassDescription = (ServiceClassDescription)classDescription;

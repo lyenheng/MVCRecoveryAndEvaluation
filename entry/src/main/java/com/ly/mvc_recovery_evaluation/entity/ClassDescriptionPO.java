@@ -3,6 +3,7 @@ package com.ly.mvc_recovery_evaluation.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author liuyue
@@ -44,4 +45,13 @@ public class ClassDescriptionPO {
 
     @Column(name="extends_services")
     private String extendsServices;
+
+    @Column(name="has_request_type_error")
+    private int hasRequestTypeError;
+
+    @Column(name="has_request_param_annotation_loss")
+    private int hasRequestParamAnnotationLoss;
+
+    @Column(name="has_request_param_annotation_error")
+    private int hasRequestParamAnnotationError;
 }

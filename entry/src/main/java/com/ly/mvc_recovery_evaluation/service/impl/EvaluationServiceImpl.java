@@ -1,6 +1,8 @@
 package com.ly.mvc_recovery_evaluation.service.impl;
 
 import com.ly.mvc_recovery_evaluation.entity.*;
+import com.ly.mvc_recovery_evaluation.evaluation.EfficiencyEvaluator;
+import com.ly.mvc_recovery_evaluation.evaluation.FunctionalityEvaluator;
 import com.ly.mvc_recovery_evaluation.evaluation.MaintainablityEvalutor;
 import com.ly.mvc_recovery_evaluation.service.ClassService;
 import com.ly.mvc_recovery_evaluation.service.EvaluationService;
@@ -26,7 +28,10 @@ public class EvaluationServiceImpl implements EvaluationService {
     private MaintainablityEvalutor maintainablityEvalutor;
 
     @Autowired
-    private MethodService methodService;
+    private FunctionalityEvaluator functionalityEvaluator;
+
+    @Autowired
+    private EfficiencyEvaluator efficiencyEvaluator;
 
     public static int CONTROLLER_LAYER_COMPLEXITY = 5;
 
@@ -51,10 +56,34 @@ public class EvaluationServiceImpl implements EvaluationService {
         List<String> errorClass = new ArrayList<>();
         errorClass.add("ClassC");
         errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
+        errorClass.add("ClassD");
         FunctionalityResult functionalityResult = new FunctionalityResult();
         functionalityResult.setRequestTypeErrorClass(errorClass);
         functionalityResult.setHasDependencyCircle(false);
-        functionalityResult.setRequestParamErrorClass(errorClass);
+        functionalityResult.setRequestParamAnnotationLossClass(errorClass);
+        functionalityResult.setRequestParamAnnotationErrorClass(errorClass);
 
         EfficiencyResult efficiencyResult = new EfficiencyResult();
         List<String> testClass = new ArrayList<>();
@@ -83,6 +112,13 @@ public class EvaluationServiceImpl implements EvaluationService {
         MaintainabilityResult maintainabilityResult = getMaintainabilityResult(classDescriptionVOS);
         evaluationPO.setMaintainabilityResult(maintainabilityResult);
 
+        // 功能评估
+        FunctionalityResult functionalityResult = getFunctionalityResult(classDescriptionVOS);
+        evaluationPO.setFunctionalityResult(functionalityResult);
+
+        // 效率
+        EfficiencyResult efficiencyResult = getEfficiencyResult(classDescriptionVOS);
+        evaluationPO.setEfficiencyResult(efficiencyResult);
 
         return evaluationPO;
     }
@@ -93,7 +129,7 @@ public class EvaluationServiceImpl implements EvaluationService {
      * 可维护性评估
      * @return
      */
-    private MaintainabilityResult getMaintainabilityResult(List<ClassDescriptionVO> classDescriptionVOS){
+    public MaintainabilityResult getMaintainabilityResult(List<ClassDescriptionVO> classDescriptionVOS){
         MaintainabilityResult maintainabilityResult = new MaintainabilityResult();
 
         // 模块化
@@ -115,7 +151,7 @@ public class EvaluationServiceImpl implements EvaluationService {
      * 模块化评估
      * @param classDescriptionVOS
      */
-    private ModuleEvaluateResult moduleEvaluate(List<ClassDescriptionVO> classDescriptionVOS) {
+    public ModuleEvaluateResult moduleEvaluate(List<ClassDescriptionVO> classDescriptionVOS) {
         return maintainablityEvalutor.evaluateModule(classDescriptionVOS);
     }
 
@@ -124,7 +160,7 @@ public class EvaluationServiceImpl implements EvaluationService {
      * @param classDescriptionVOS
      * @return
      */
-    private AnalyzabilityResult getAnalyzabilityResult(List<ClassDescriptionVO> classDescriptionVOS){
+    public AnalyzabilityResult getAnalyzabilityResult(List<ClassDescriptionVO> classDescriptionVOS){
 
         AnalyzabilityResult analyzabilityResult = new AnalyzabilityResult();
 
@@ -148,9 +184,31 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     }
 
-    // 易修改性评估
+    /**
+     * 易修改性评估
+     * @param classDescriptionVOS
+     * @return
+     */
     public List<ModifiabilityResult> getModifiability(List<ClassDescriptionVO> classDescriptionVOS) {
         return maintainablityEvalutor.evaluateModifiable(classDescriptionVOS);
+    }
+
+    /**
+     * 功能评估
+     * @param classDescriptionVOS
+     * @return
+     */
+    public FunctionalityResult getFunctionalityResult(List<ClassDescriptionVO> classDescriptionVOS){
+        return functionalityEvaluator.evaluateAccuracy(classDescriptionVOS);
+    }
+
+    /**
+     * 效率评估
+     * @param classDescriptionVOS
+     * @return
+     */
+    public EfficiencyResult getEfficiencyResult(List<ClassDescriptionVO> classDescriptionVOS){
+        return efficiencyEvaluator.evaluateTime(classDescriptionVOS);
     }
 
 }
