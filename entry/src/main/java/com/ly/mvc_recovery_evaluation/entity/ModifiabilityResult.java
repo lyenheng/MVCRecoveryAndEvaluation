@@ -16,6 +16,8 @@ public class ModifiabilityResult {
 
     private String className;
 
+    private String fullyQualifiedName ;
+
     /**
      * 层次
      */

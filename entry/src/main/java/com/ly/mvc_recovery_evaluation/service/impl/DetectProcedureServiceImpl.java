@@ -276,20 +276,24 @@ public class DetectProcedureServiceImpl implements DetectProcedureService {
             List<ApiInfo> apiInfos = controllerClassDescription.getApiInfos();
             for (ApiInfo apiInfo : apiInfos) {
                 // 请求类型是否正确
-                if (apiInfo.getRequestType().equals(RequestType.ALL)) {
-                    classDescriptionPO.setHasRequestTypeError(1);
+                if (apiInfo.getRequestType() != null){
+                    if (apiInfo.getRequestType().equals(RequestType.ALL)) {
+                        classDescriptionPO.setHasRequestTypeError(1);
+                    }
                 }
                 List<ApiParameterInfo> apiParameterInfos = apiInfo.getApiParameterInfos();
-                int bodyParamSum = 0;
-                for (ApiParameterInfo apiParameterInfo : apiParameterInfos) {
-                    // 请求参数注解是否为空
-                    if (apiParameterInfo.getRequestParameterType().equals(RequestParameterType.NULL)){
-                        classDescriptionPO.setHasRequestParamAnnotationLoss(1);
-                    }else if (apiParameterInfo.getRequestParameterType().equals(RequestParameterType.BODY)) {
-                        bodyParamSum++;
-                        if (bodyParamSum > 1){
-                            // 请求参数注解body类型是否超过1
-                            classDescriptionPO.setHasRequestParamAnnotationError(1);
+                if(apiParameterInfos != null && apiParameterInfos.size() > 0){
+                    int bodyParamSum = 0;
+                    for (ApiParameterInfo apiParameterInfo : apiParameterInfos) {
+                        // 请求参数注解是否为空
+                        if (apiParameterInfo.getRequestParameterType().equals(RequestParameterType.NULL)){
+                            classDescriptionPO.setHasRequestParamAnnotationLoss(1);
+                        }else if (apiParameterInfo.getRequestParameterType().equals(RequestParameterType.BODY)) {
+                            bodyParamSum++;
+                            if (bodyParamSum > 1){
+                                // 请求参数注解body类型是否超过1
+                                classDescriptionPO.setHasRequestParamAnnotationError(1);
+                            }
                         }
                     }
                 }

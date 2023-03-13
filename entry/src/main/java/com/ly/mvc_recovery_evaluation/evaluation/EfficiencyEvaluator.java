@@ -53,7 +53,7 @@ public class EfficiencyEvaluator {
         Double cyclomaticComplexityAverage = methodCyclomaticComplexitySum * 1.0 / methodNum ;
         efficiencyResult.setMiddleCyclomaticComplexity(middleCyclomaticComplexityList);
         efficiencyResult.setHighCyclomaticComplexity(highCyclomaticComplexityList);
-        efficiencyResult.setCyclomaticComplexityAverage(cyclomaticComplexityAverage);
+        efficiencyResult.setCyclomaticComplexityAverage((double) Math.round(cyclomaticComplexityAverage * 100) / 100);
 
         return efficiencyResult;
     }

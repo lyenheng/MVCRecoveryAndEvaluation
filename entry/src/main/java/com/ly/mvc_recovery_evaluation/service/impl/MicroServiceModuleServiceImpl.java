@@ -71,8 +71,10 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
         Set<ModuleCoordinate> allModuleCoordinates = moduleNodePOs.stream().map(moduleNodePO -> new ModuleCoordinate(moduleNodePO.getGroupId(), moduleNodePO.getArtifactId())).collect(Collectors.toSet());
 
         List<Long> moduleIds = new ArrayList<>();
+        Set<Long> moduleIdSet = new HashSet<>();
         List<Long> currentModuleIds = new ArrayList<>();
 
+        moduleIdSet.add(entryModuleId);
         // 入口模块的依赖信息
         List<ModuleDependencyPO> moduleDependencyPOS = moduleDependencyService.findByModule(entryModuleId);
         for (ModuleDependencyPO moduleDependencyPO : moduleDependencyPOS) {
@@ -80,7 +82,8 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
             if (allModuleCoordinates.contains(moduleCoordinate)){
                 ModuleNodePO moduleNodePO = moduleService.findByGroupIdAndArtifactId(moduleDependencyPO.getGroupId(), moduleDependencyPO.getArtifactId(), projectId);
                 if (moduleNodePO != null){
-                    moduleIds.add(moduleNodePO.getId());
+//                    moduleIds.add(moduleNodePO.getId());
+                    moduleIdSet.add(moduleNodePO.getId());
                     currentModuleIds.add(moduleNodePO.getId());
                 }
             }
@@ -97,7 +100,8 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
                     if (allModuleCoordinates.contains(moduleCoordinate)){
                         ModuleNodePO moduleNodePO = moduleService.findByGroupIdAndArtifactId(moduleDependencyPO.getGroupId(), moduleDependencyPO.getArtifactId(), projectId);
                         if (moduleNodePO != null){
-                            moduleIds.add(moduleNodePO.getId());
+                            moduleIdSet.add(moduleNodePO.getId());
+//                            moduleIds.add(moduleNodePO.getId());
                             currentModuleIds.add(moduleNodePO.getId());
                         }
                     }
@@ -105,7 +109,7 @@ public class MicroServiceModuleServiceImpl implements MicroServiceModuleService 
             }
         }
 
-        return moduleIds;
+        return new ArrayList<>(moduleIdSet);
     }
 
     @Override

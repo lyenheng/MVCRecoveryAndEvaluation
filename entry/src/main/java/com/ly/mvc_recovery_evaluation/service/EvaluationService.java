@@ -8,7 +8,7 @@ import com.ly.mvc_recovery_evaluation.entity.EvaluationPO;
  */
 public interface EvaluationService {
 
-    EvaluationPO getResult(Long moduleId);
-
     EvaluationPO getResult1(Long moduleId);
+
+    EvaluationPO getResult(Long moduleId);
 }

@@ -45,7 +45,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDescription> {
                 String annotationName = annotation.getName().getIdentifier();
                 annotationList.add(annotationName);
 
-                if (annotationName.equals("RestController")){
+                if (annotationName.equals("RestController") || annotationName.equals("Controller") ){
                     arg.setClassType(ClassType.CONTROLLER);
                 }else if (annotationName.equals("Service")){
                     arg.setClassType(ClassType.SERVICE);

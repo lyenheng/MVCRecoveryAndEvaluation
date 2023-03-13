@@ -26,8 +26,6 @@ public class EvaluationController {
 
     @GetMapping("/{entryModuleId}")
     public EvaluationPO getEvaluationResult(@PathVariable Long entryModuleId) {
-
-
         return evaluationService.getResult(entryModuleId);
     }
 

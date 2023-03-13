@@ -3,6 +3,8 @@ package com.ly.mvc_recovery_evaluation.vo;
 import com.ly.mvc_recovery_evaluation.entity.ClassDescriptionPO;
 import lombok.Data;
 
+import javax.persistence.Column;
+
 
 /**
  * @author liuyue
@@ -37,6 +39,12 @@ public class ClassDescriptionVO extends ClassDescriptionPO {
 
     private String extendsServices;
 
+    private Integer hasRequestTypeError;
+
+    private Integer hasRequestParamAnnotationLoss;
+
+    private Integer hasRequestParamAnnotationError;
+
     public ClassDescriptionVO(ClassDescriptionPO classDescriptionPO, Integer methodNum) {
         this.id = classDescriptionPO.getId();
         this.moduleNodeId = classDescriptionPO.getModuleNodeId();
@@ -49,5 +57,8 @@ public class ClassDescriptionVO extends ClassDescriptionPO {
         this.declarationType = classDescriptionPO.getDeclarationType();
         this.interfaceServices = classDescriptionPO.getInterfaceServices();
         this.extendsServices = classDescriptionPO.getExtendsServices();
+        this.hasRequestTypeError = classDescriptionPO.getHasRequestTypeError();
+        this.hasRequestParamAnnotationLoss = classDescriptionPO.getHasRequestParamAnnotationLoss();
+        this.hasRequestParamAnnotationError = classDescriptionPO.getHasRequestParamAnnotationError();
     }
 }

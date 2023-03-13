@@ -47,11 +47,11 @@ public class ClassDescriptionPO {
     private String extendsServices;
 
     @Column(name="has_request_type_error")
-    private int hasRequestTypeError;
+    private Integer hasRequestTypeError;
 
     @Column(name="has_request_param_annotation_loss")
-    private int hasRequestParamAnnotationLoss;
+    private Integer hasRequestParamAnnotationLoss;
 
     @Column(name="has_request_param_annotation_error")
-    private int hasRequestParamAnnotationError;
+    private Integer hasRequestParamAnnotationError;
 }

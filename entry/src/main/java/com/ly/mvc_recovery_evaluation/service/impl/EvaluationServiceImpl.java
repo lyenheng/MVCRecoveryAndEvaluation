@@ -40,7 +40,7 @@ public class EvaluationServiceImpl implements EvaluationService {
     public static int SELF_CALL = 10;
 
     @Override
-    public EvaluationPO getResult(Long moduleId) {
+    public EvaluationPO getResult1(Long moduleId) {
 
         EvaluationPO evaluationPO = new EvaluationPO();
 
@@ -48,9 +48,26 @@ public class EvaluationServiceImpl implements EvaluationService {
         maintainabilityResult.setAnalyzabilityResult(new AnalyzabilityResult(1.0, 0.89, 0.86, 0.996));
         maintainabilityResult.setModuleEvaluateResult(new ModuleEvaluateResult(20, 30, 10, 0.98));
         List<ModifiabilityResult> modifiabilityResults = new ArrayList<>();
-        modifiabilityResults.add(new ModifiabilityResult("TestController", "Controller", 51.0));
-        modifiabilityResults.add(new ModifiabilityResult("TestService", "Service", 101.0));
-        modifiabilityResults.add(new ModifiabilityResult("TestDao", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestController","fullyQualifiedName1", "Controller", 51.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestService", "fullyQualifiedName1", "Service", 101.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
+        modifiabilityResults.add(new ModifiabilityResult("TestDao","fullyQualifiedName3", "Dao", 21.0));
         maintainabilityResult.setModifiabilityResults(modifiabilityResults);
 
         List<String> errorClass = new ArrayList<>();
@@ -101,7 +118,7 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     @Override
-    public EvaluationPO getResult1(Long moduleId) {
+    public EvaluationPO getResult(Long moduleId) {
 
         EvaluationPO evaluationPO = new EvaluationPO();
 

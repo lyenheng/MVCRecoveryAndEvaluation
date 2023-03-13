@@ -9,6 +9,11 @@ spring:
     username: root
     password: 123456
 
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+
   data:
     mongodb:
       database: mvc_recovery_evaluation

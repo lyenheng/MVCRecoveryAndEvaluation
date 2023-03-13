@@ -54,11 +54,13 @@ public class ModuleDependencyGraphDaoImpl implements ModuleDependencyGraphDao {
             nodeDocs.add(getDocumentForModuleNode(node));
         }
 
-        for (ModuleDependencyGraphEdge edge: edges) {
-            Document document = new Document();
-            document.put("begin", edge.getStartNode().getModuleName());
-            document.put("end", edge.getEndNode().getModuleName());
-            edgesDocs.add(document);
+        if (edges != null && edges.size() >0){
+            for (ModuleDependencyGraphEdge edge: edges) {
+                Document document = new Document();
+                document.put("begin", edge.getStartNode().getModuleName());
+                document.put("end", edge.getEndNode().getModuleName());
+                edgesDocs.add(document);
+            }
         }
 
         doc.put("nodes", nodeDocs);

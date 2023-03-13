@@ -31,18 +31,18 @@ public class FunctionalityEvaluator {
         List<String> requestParamAnnotationErrorClassList = new ArrayList<>();
 
         for (ClassDescriptionVO classDescriptionVO : classDescriptionVOS) {
-            if (!classDescriptionVO.getClassType().equalsIgnoreCase("CONTROLLER")){
+            if (classDescriptionVO.getClassType() == null || !classDescriptionVO.getClassType().equalsIgnoreCase("CONTROLLER")){
                 continue;
             }
-            if (classDescriptionVO.getHasRequestTypeError() == 1){
+            if (classDescriptionVO.getHasRequestTypeError() != null && classDescriptionVO.getHasRequestTypeError() == 1){
                 requestTypeErrorClassList.add(classDescriptionVO.getName());
             }
 
-            if (classDescriptionVO.getHasRequestParamAnnotationLoss() == 1){
+            if (classDescriptionVO.getHasRequestParamAnnotationLoss() != null && classDescriptionVO.getHasRequestParamAnnotationLoss() == 1){
                 requestParamAnnotationLossClassList.add(classDescriptionVO.getName());
             }
 
-            if (classDescriptionVO.getHasRequestParamAnnotationError() == 1){
+            if (classDescriptionVO.getHasRequestParamAnnotationError() != null && classDescriptionVO.getHasRequestParamAnnotationError() == 1){
                 requestParamAnnotationErrorClassList.add(classDescriptionVO.getName());
             }
         }
